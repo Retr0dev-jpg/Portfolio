@@ -1,3 +1,6 @@
+# Editor
+.cursor/
+
 # Dependencies
 /node_modules
 

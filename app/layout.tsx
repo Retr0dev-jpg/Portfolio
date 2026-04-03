@@ -2,6 +2,8 @@ import './globals.css'
 import type { Metadata } from 'next'
 import MouseEffect from './components/MouseEffect'
 import ParticlesBackground from './components/ParticlesBackground'
+import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 export const metadata: Metadata = {
   title: 'Retr0_ Portfolio',
@@ -24,6 +26,8 @@ export default function RootLayout({
         <MouseEffect />
         <ParticlesBackground />
         {children}
+        {process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === 'true' && <Analytics />}
+        {process.env.NEXT_PUBLIC_ENABLE_SPEED_INSIGHTS === 'true' && <SpeedInsights />}
       </body>
     </html>
   )
