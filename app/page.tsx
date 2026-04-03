@@ -4,9 +4,10 @@ import AnimatedSection from './components/AnimatedSection';
 import VerticalSliderNav from './components/VerticalSliderNav';
 import HeroShape from './components/HeroShape';
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useIsMobile } from './hooks/useIsMobile';
 
 const skillsData = {
-  skill1: ['Sviluppo web', 'Frontend React', 'Backend Node.js', 'Full-stack development', 'API REST'],
+  skill1: ['Sviluppo web', 'Frontend', 'Backend', 'Full-stack development', 'API REST'],
   skill2: ['design minimalista', 'interfacce intuitive', 'UX/UI design', 'design responsive', 'prototipazione'],
   skill3: ['creatività', 'innovazione', 'problem solving', 'pensiero laterale', 'soluzioni eleganti']
 } as const;
@@ -40,7 +41,7 @@ function AnimatedHeroShape() {
 
   return (
     <div
-      className="absolute right-[-600px] top-1/2 transform -translate-y-1/2 w-[400px] h-[400px] opacity-0 animate-fade-in cursor-pointer"
+      className="absolute right-[-600px] top-1/2 transform -translate-y-1/2 w-[400px] h-[400px] opacity-0 animate-fade-in hidden md:block cursor-pointer"
       style={{ animationDelay: '900ms', animationFillMode: 'forwards' }}
       onClick={handleClick}
       aria-disabled={isAnimating}
@@ -55,6 +56,7 @@ function AnimatedHeroShape() {
 export default function Home() {
   // ═══ BANNER "IN COSTRUZIONE" ═══ cambia a false per disattivarlo
   const SHOW_BANNER = true;
+  const isMobile = useIsMobile();
 
   const [skillIndices, setSkillIndices] = useState<Record<SkillKey, number>>({
     skill1: 0,
@@ -594,7 +596,7 @@ export default function Home() {
   return (
     <>
       {SHOW_BANNER && (
-        <div className="fixed top-0 left-0 w-full z-[60] bg-accent text-white text-center py-2 px-4 text-sm font-mono tracking-wide shadow-md flex items-center justify-center gap-3 flex-wrap">
+        <div className="fixed top-0 left-0 w-full z-[60] bg-accent text-white text-center py-2 px-3 md:px-4 text-xs md:text-sm font-mono tracking-wide shadow-md flex items-center justify-center gap-2 md:gap-3 flex-wrap">
           <span className="inline-flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-white animate-pulse" />
             Portfolio in creazione...
@@ -618,13 +620,13 @@ export default function Home() {
       {/* Hero Section */}
       <section id="home" className="h-screen flex items-center bg-white">
         <div className="container mx-auto px-4">
-          <div className="max-w-xl ml-[210px] relative">
+          <div className="max-w-xl mx-auto md:mx-0 md:ml-[210px] relative">
             <h1 className="text-4xl md:text-6xl font-bold mb-4 animate-fade-in">
               <span className="text-accent font-mono">
                 Retr0<span className="animate-blink">_</span>
               </span>
             </h1>
-            <p className="text-xl md:text-2xl mb-6 opacity-0 animate-slide-up text-gray-700 skills-container" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
+            <p className="text-lg md:text-2xl mb-6 opacity-0 animate-slide-up text-gray-700 skills-container" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
               <span 
                 className="clickable-word"
                 onClick={() => rotateWord('skill1')}
@@ -681,36 +683,170 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="bg-accent !min-h-[550px] flex items-center justify-center relative">
+      <section id="about" className="bg-accent !min-h-[400px] md:!min-h-[550px] flex items-center justify-center relative overflow-hidden">
         {/* Emoji lato sinistro */}
-        <div className="absolute left-20 top-1/4 text-7xl rotate-[-15deg] drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)] opacity-70 emoji-up-down-1">
+        <div className="hidden md:block absolute left-20 top-1/4 text-7xl rotate-[-15deg] drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)] opacity-70 emoji-up-down-1">
           💻
         </div>
-        <div className="absolute left-40 bottom-1/4 text-6xl rotate-[10deg] drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)] opacity-60 emoji-up-down-2">
+        <div className="hidden md:block absolute left-40 bottom-1/4 text-6xl rotate-[10deg] drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)] opacity-60 emoji-up-down-2">
           📱
         </div>
-        <div className="absolute left-10 bottom-1/3 text-5xl rotate-[-5deg] drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)] opacity-50 emoji-down-up-1">
+        <div className="hidden md:block absolute left-10 bottom-1/3 text-5xl rotate-[-5deg] drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)] opacity-50 emoji-down-up-1">
           ⚙️
         </div>
 
-        <p className="text-white text-2xl text-center max-w-2xl mx-auto z-10">
+        <p className="text-white text-xl md:text-2xl text-center max-w-2xl mx-auto z-10 px-6">
           Sono uno sviluppatore web con una forte passione per il design minimalista e le esperienze digitali essenziali. Credo che la semplicità sia la chiave per un web moderno, accessibile e bello.
         </p>
 
         {/* Emoji lato destro */}
-        <div className="absolute right-20 top-1/3 text-7xl rotate-[15deg] drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)] opacity-70 emoji-up-down-3">
+        <div className="hidden md:block absolute right-20 top-1/3 text-7xl rotate-[15deg] drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)] opacity-70 emoji-up-down-3">
           🎨
         </div>
-        <div className="absolute right-40 top-1/4 text-6xl rotate-[-8deg] drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)] opacity-60 emoji-down-up-2">
+        <div className="hidden md:block absolute right-40 top-1/4 text-6xl rotate-[-8deg] drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)] opacity-60 emoji-down-up-2">
           ✨
         </div>
-        <div className="absolute right-10 bottom-1/4 text-5xl rotate-[5deg] drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)] opacity-50 emoji-up-down-4">
+        <div className="hidden md:block absolute right-10 bottom-1/4 text-5xl rotate-[5deg] drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)] opacity-50 emoji-up-down-4">
           🚀
         </div>
       </section>
 
       {/* Works Section */}
       <AnimatedSection id="works" title="Works" variant="right" showTitle={false}>
+        {isMobile ? (
+          /* ═══ MOBILE: Timeline verticale ═══ */
+          <div className="w-full max-w-lg mx-auto px-2">
+            {/* CV Download */}
+            <div className="flex justify-center mb-10">
+              <a
+                href="/CV/CV_Marco_Simone_Cannizzaro.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white rounded-2xl shadow-lg border border-gray-200 text-accent font-semibold text-sm hover:shadow-xl transition-all"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v12m0 0l-4-4m4 4l4-4m-9 9h10" />
+                </svg>
+                Scarica CV
+                <span className="text-xs text-gray-500 font-normal">PDF</span>
+              </a>
+            </div>
+
+            {/* Timeline */}
+            <div className="relative pl-8 border-l-2 border-accent/30 space-y-10">
+              {/* Nodo 1 - Metapack */}
+              <div className="relative">
+                <div className="absolute -left-[25px] top-1 w-4 h-4 rounded-full bg-accent border-4 border-white shadow-md" />
+                <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                  <div className="bg-gradient-to-r from-purple-500 to-purple-600 px-5 py-3">
+                    <h3 className="text-base font-bold text-white">Metapack Engineering Srl</h3>
+                    <p className="text-xs text-purple-100">Ottobre 2025 - Presente</p>
+                  </div>
+                  <div className="p-5">
+                    <p className="text-xs font-semibold text-accent uppercase tracking-wider mb-2">Software Specialist</p>
+                    <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                      Sviluppo di applicazioni HMI in ambiente .NET (C#/VB.NET) per il monitoraggio e il controllo di processi industriali.
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded font-medium">Automazione</span>
+                      <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded font-medium">Serializzazione</span>
+                      <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded font-medium">VB.NET</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Nodo 2 - Freelancer */}
+              <div className="relative">
+                <div className="absolute -left-[25px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-white shadow-md" />
+                <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                  <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-5 py-3">
+                    <h3 className="text-base font-bold text-white">Freelancer</h3>
+                    <p className="text-xs text-blue-100">Giugno 2025 - Ottobre 2025</p>
+                  </div>
+                  <div className="p-5">
+                    <p className="text-xs font-semibold text-accent uppercase tracking-wider mb-2">Freelance Developer</p>
+                    <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                      Progettazione e realizzazione di prodotti digitali su misura: dal discovery al deploy, con focus su scalabilità, manutenibilità e valore per il business.
+                    </p>
+                    <div className="mb-3">
+                      <p className="text-xs font-semibold text-gray-600 mb-1.5">Progetti realizzati:</p>
+                      <div className="space-y-0.5 text-sm text-gray-600">
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-400">•</span>
+                          <a href="https://new.molisebasket.net" target="_blank" rel="noopener noreferrer" className="text-blue-600">new.molisebasket.net</a>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-400">•</span>
+                          <a href="https://www.passoetiro.com" target="_blank" rel="noopener noreferrer" className="text-blue-600">www.passoetiro.com</a>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-400">•</span>
+                          <a href="https://retr0hub.dev" target="_blank" rel="noopener noreferrer" className="text-blue-600">retr0hub.dev</a>
+                          <span className="text-gray-500 text-xs">(In sviluppo)</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-400">•</span>
+                          <a href="https://lab.retr0hub.dev" target="_blank" rel="noopener noreferrer" className="text-blue-600">lab.retr0hub.dev</a>
+                          <span className="text-gray-500 text-xs">(Prossimamente)</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">React</span>
+                      <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">Next.js</span>
+                      <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">Web Design</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Nodo 3 - Diploma */}
+              <div className="relative">
+                <div className="absolute -left-[25px] top-1 w-4 h-4 rounded-full bg-orange-500 border-4 border-white shadow-md" />
+                <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                  <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-5 py-3">
+                    <h3 className="text-base font-bold text-white">Diploma</h3>
+                    <p className="text-xs text-orange-100">2020 - 2025 | IIS Galilei Sani, Latina</p>
+                  </div>
+                  <div className="p-5">
+                    <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                      Indirizzo Informatica e Telecomunicazioni (sviluppo base di software, siti web, reti e sistemi informatici).
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded font-medium">Sviluppo Software</span>
+                      <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded font-medium">Siti Web</span>
+                      <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded font-medium">Reti</span>
+                      <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded font-medium">Sistemi IT</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Nodo 4 - PCTO MTECH */}
+              <div className="relative">
+                <div className="absolute -left-[25px] top-1 w-4 h-4 rounded-full bg-green-500 border-4 border-white shadow-md" />
+                <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                  <div className="bg-gradient-to-r from-green-500 to-green-600 px-5 py-3">
+                    <h3 className="text-base font-bold text-white">Apprendista Tecnico di Laboratorio</h3>
+                    <p className="text-xs text-green-100">Giugno 2024 - Agosto 2024 | MTECH SOLUTIONS Srl</p>
+                  </div>
+                  <div className="p-5">
+                    <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                      Setup tecnico di workstation e periferiche, diagnostica sistemistica e supporto utente in ambito IT.
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-medium">Configurazione HW</span>
+                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-medium">Analisi Guasti</span>
+                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-medium">Manutenzione</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* ═══ DESKTOP: Layout nodi draggabili originale ═══ */
         <div id="works-container" className="relative w-full max-w-7xl mx-auto pt-24 pb-16" style={{ minHeight: '620px' }}>
           {/* SVG per le connessioni professionali */}
           <svg className="absolute inset-0 w-full h-full z-0" style={{ pointerEvents: 'none' }}>
@@ -907,11 +1043,10 @@ export default function Home() {
                 </div>
                 <div className="p-6">
                   <p className="text-sm text-gray-700 leading-relaxed mb-4">
-                  Integrazione software per macchinari industriali, sviluppo in VB.NET e supporto tecnico avanzato su sistemi di visione e serializzazione.
+                  Sviluppo di applicazioni HMI in ambiente .NET (C#/VB.NET) per il monitoraggio e il controllo di processi industriali.
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded font-medium">Automazione</span>
-                    <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded font-medium">Vision System</span>
                     <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded font-medium">Serializzazione</span>
                     <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded font-medium">VB.NET</span>
               </div>
@@ -953,7 +1088,7 @@ export default function Home() {
                 </div>
                 <div className="p-6">
                   <p className="text-sm text-gray-700 leading-relaxed mb-4">
-                    Consulenza tecnica e sviluppo di siti web e software su misura, dalla progettazione alla consegna, con utilizzo di tecnologie moderne e ottimizzazione SEO.
+                  Progettazione e realizzazione di prodotti digitali su misura: dal discovery al deploy, con focus su scalabilità, manutenibilità e valore per il business.
                   </p>
                   <div className="mb-3">
                     <p className="text-xs font-semibold text-gray-600 mb-2">Progetti realizzati:</p>
@@ -983,18 +1118,6 @@ export default function Home() {
                       <div className="flex items-center gap-1 w-fit text-sm">
                         <span className="text-gray-400">•</span>
                         <a
-                          href="https://deskit.svago.online"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline"
-                        >
-                          deskit.svago.online
-                        </a>
-                        <span className="text-gray-500">(Offline)</span>
-                      </div>
-                      <div className="flex items-center gap-1 w-fit text-sm">
-                        <span className="text-gray-400">•</span>
-                        <a
                           href="https://retr0hub.dev"
                           target="_blank"
                           rel="noopener noreferrer"
@@ -1014,14 +1137,13 @@ export default function Home() {
                         >
                           lab.retr0hub.dev
                         </a>
-                        <span className="text-gray-500">(In sviluppo)</span>
+                        <span className="text-gray-500">(Prossimamente)</span>
                       </div>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">React</span>
                     <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">Next.js</span>
-                    <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">SEO</span>
                     <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">Web Design</span>
                   </div>
                 </div>
@@ -1061,7 +1183,7 @@ export default function Home() {
                 </div>
                 <div className="p-6">
                   <p className="text-sm text-gray-700 leading-relaxed mb-4">
-                    Indirizzo Informatica e Telecomunicazioni con focus su sviluppo software, creazione siti web, gestione di reti e sistemi informatici.
+                  Indirizzo Informatica e Telecomunicazioni (sviluppo base di software, siti web, reti e sistemi informatici).
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded font-medium">Sviluppo Software</span>
@@ -1107,13 +1229,12 @@ export default function Home() {
                 </div>
                 <div className="p-6">
                   <p className="text-sm text-gray-700 leading-relaxed mb-4">
-                    Installazione e configurazione di dispositivi, analisi guasti e supporto alla manutenzione, con redazione di documentazione tecnica.
+                  Setup tecnico di workstation e periferiche, diagnostica sistemistica e supporto utente in ambito IT.
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-medium">Configurazione HW</span>
                     <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-medium">Analisi Guasti</span>
                     <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-medium">Manutenzione</span>
-                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-medium">Documentazione</span>
                   </div>
                 </div>
               </div>
@@ -1143,6 +1264,7 @@ export default function Home() {
             </div>
           </div>
         </div>
+        )}
       </AnimatedSection>
 
       {/* Skills Section */}
@@ -1305,8 +1427,8 @@ export default function Home() {
 
       {/* Projects Section */}
       <AnimatedSection id="projects" title="Projects" variant="left" showTitle={false}>
-        <div className="max-w-6xl mx-auto mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-center">
+        <div className="max-w-6xl mx-auto mb-8 md:mb-12">
+          <h2 className="text-3xl md:text-5xl font-bold text-center">
             <span className="text-accent">Progetti in</span><br />
             <span className="relative inline-block px-2">
               <span className="relative z-0">evidenza</span>
@@ -1317,8 +1439,9 @@ export default function Home() {
             </span>
           </h2>
         </div>
-        <div className="relative mx-auto" style={{ maxWidth: 'calc(256px * 4 + 16px * 3 + 96px)' }}>
-          {/* Freccia sinistra */}
+
+        {/* Desktop: carousel con frecce */}
+        <div className="hidden md:block relative mx-auto" style={{ maxWidth: 'calc(256px * 4 + 16px * 3 + 96px)' }}>
           <button
             type="button"
             onClick={() => scrollProjects('left')}
@@ -1329,7 +1452,6 @@ export default function Home() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          {/* Freccia destra */}
           <button
             type="button"
             onClick={() => scrollProjects('right')}
@@ -1594,10 +1716,134 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </AnimatedSection>
 
-      {/* Separatore decorativo */}
-      <div className="py-16 bg-white">
+        {/* Mobile: scroll orizzontale con swipe */}
+        <div className="md:hidden w-full overflow-x-auto snap-x snap-mandatory pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
+          <div className="flex gap-4 px-4" style={{ width: 'max-content' }}>
+            {/* Project 1 - Community */}
+            <div className="group bg-white border border-gray-200 rounded-lg shadow-sm w-[280px] flex-shrink-0 snap-center">
+              <div className="relative h-32 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden rounded-t-lg">
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-400/20 to-slate-500/20"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-12 h-12 bg-white/80 rounded-lg flex items-center justify-center shadow-lg">
+                    <svg className="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M4 3a1 1 0 000 2h1v10H4a1 1 0 000 2h12a1 1 0 000-2h-1V5h1a1 1 0 000-2H4zm5 2v10h2V5H9z" />
+                    </svg>
+                  </div>
+                </div>
+                <button onClick={() => window.open('https://lab.retr0hub.dev', '_blank', 'noopener,noreferrer')} className="absolute top-2 left-2 w-7 h-7 bg-gray-900/40 backdrop-blur-sm rounded-md flex items-center justify-center z-10">
+                  <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                </button>
+              </div>
+              <div className="p-4">
+                <h3 className="font-semibold text-gray-900 mb-1 text-base">Community</h3>
+                <p className="text-sm text-gray-600 mb-3 line-clamp-2">Playground sperimentale per componenti UI, articoli tecnici e micro-esperimenti.</p>
+                <div className="flex flex-wrap gap-1">
+                  <span className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">Astro</span>
+                  <span className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">MDX</span>
+                  <span className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">Cloudflare</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Project 2 - Portfolio */}
+            <div className="group bg-white border border-gray-200 rounded-lg shadow-sm w-[280px] flex-shrink-0 snap-center">
+              <div className="relative h-32 bg-gradient-to-br from-orange-100 to-orange-200 overflow-hidden rounded-t-lg">
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-red-400/20"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-12 h-12 bg-white/80 rounded-lg flex items-center justify-center shadow-lg">
+                    <svg className="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/></svg>
+                  </div>
+                </div>
+                <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="absolute top-2 left-2 w-7 h-7 bg-gray-900/40 backdrop-blur-sm rounded-md flex items-center justify-center z-10">
+                  <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                </button>
+              </div>
+              <div className="p-4">
+                <h3 className="font-semibold text-gray-900 mb-1 text-base">Portfolio</h3>
+                <p className="text-sm text-gray-600 mb-3 line-clamp-2">Ecosistema personale: design system proprietario, esperimenti UI e community/lab.</p>
+                <div className="flex flex-wrap gap-1">
+                  <span className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">Next.js 15</span>
+                  <span className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">Framer Motion</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Project 3 - Passoetiro */}
+            <div className="group bg-white border border-gray-200 rounded-lg shadow-sm w-[280px] flex-shrink-0 snap-center">
+              <div className="relative h-32 bg-gradient-to-br from-blue-100 to-blue-200 overflow-hidden rounded-t-lg">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-cyan-400/20"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-12 h-12 bg-white/80 rounded-lg flex items-center justify-center shadow-lg">
+                    <svg className="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd"/></svg>
+                  </div>
+                </div>
+                <button onClick={() => window.open('https://passoetiro.com', '_blank', 'noopener,noreferrer')} className="absolute top-2 left-2 w-7 h-7 bg-gray-900/40 backdrop-blur-sm rounded-md flex items-center justify-center z-10">
+                  <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                </button>
+              </div>
+              <div className="p-4">
+                <h3 className="font-semibold text-gray-900 mb-1 text-base">Passoetiro</h3>
+                <p className="text-sm text-gray-600 mb-3 line-clamp-2">Magazine digitale con redazione multi-autore e ottimizzazione SEO.</p>
+                <div className="flex flex-wrap gap-1">
+                  <span className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">Next.js</span>
+                  <span className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">MDX</span>
+                  <span className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">Tailwind</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Project 4 - Molisebasket */}
+            <div className="group bg-white border border-gray-200 rounded-lg shadow-sm w-[280px] flex-shrink-0 snap-center">
+              <div className="relative h-32 bg-gradient-to-br from-purple-100 to-purple-200 overflow-hidden rounded-t-lg">
+                <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-purple-400/20"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-12 h-12 bg-white/80 rounded-lg flex items-center justify-center shadow-lg">
+                    <svg className="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 20 20"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/></svg>
+                  </div>
+                </div>
+                <button onClick={() => window.open('https://new.molisebasket.net', '_blank', 'noopener,noreferrer')} className="absolute top-2 left-2 w-7 h-7 bg-gray-900/40 backdrop-blur-sm rounded-md flex items-center justify-center z-10">
+                  <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                </button>
+              </div>
+              <div className="p-4">
+                <h3 className="font-semibold text-gray-900 mb-1 text-base">Molisebasket</h3>
+                <p className="text-sm text-gray-600 mb-3 line-clamp-2">Restyling portale: risultati live, roster dinamici e CMS headless.</p>
+                <div className="flex flex-wrap gap-1">
+                  <span className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">Next.js</span>
+                  <span className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">Supabase</span>
+                  <span className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">Tailwind</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Project 5 - Deskit */}
+            <div className="group bg-white border border-gray-200 rounded-lg shadow-sm w-[280px] flex-shrink-0 snap-center">
+              <div className="relative h-32 bg-gradient-to-br from-green-100 to-green-200 overflow-hidden rounded-t-lg">
+                <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 to-emerald-400/20"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-12 h-12 bg-white/80 rounded-lg flex items-center justify-center shadow-lg">
+                    <svg className="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fillRule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 102 0V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd"/></svg>
+                  </div>
+                </div>
+                <button onClick={() => window.open('https://deskit.svago.online', '_blank', 'noopener,noreferrer')} className="absolute top-2 left-2 w-7 h-7 bg-gray-900/40 backdrop-blur-sm rounded-md flex items-center justify-center z-10">
+                  <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                </button>
+              </div>
+              <div className="p-4">
+                <h3 className="font-semibold text-gray-900 mb-1 text-base">Deskit</h3>
+                <p className="text-sm text-gray-600 mb-3 line-clamp-2">Suite per gestire menu, palinsesti e promo con sync cloud.</p>
+                <div className="flex flex-wrap gap-1">
+                  <span className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">React</span>
+                  <span className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">Electron</span>
+                  <span className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">Firebase</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </AnimatedSection>
+      <div className="py-8 md:py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-4">
             <div className="h-px bg-gradient-to-r from-transparent via-accent/30 to-accent/50 flex-1 max-w-xs"></div>
@@ -1614,26 +1860,26 @@ export default function Home() {
       {/* Contact Section */}
       <AnimatedSection id="contact" title="Contact" variant="right" showTitle={false}>
         <div className="max-w-7xl mx-auto relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-start">
             {/* Colonna Sinistra - Info */}
             <div className="relative">
               {/* Emoji decorative sinistra */}
-              <div className="absolute -left-16 top-10 text-5xl opacity-70 animate-bounce z-0" style={{ animationDuration: '3s' }}>
+              <div className="hidden lg:block absolute -left-16 top-10 text-5xl opacity-70 animate-bounce z-0" style={{ animationDuration: '3s' }}>
                 📧
               </div>
-              <div className="absolute -left-20 top-40 text-4xl opacity-60 animate-bounce z-0" style={{ animationDuration: '4s', animationDelay: '0.5s' }}>
+              <div className="hidden lg:block absolute -left-20 top-40 text-4xl opacity-60 animate-bounce z-0" style={{ animationDuration: '4s', animationDelay: '0.5s' }}>
                 📱
               </div>
-              <div className="absolute -left-12 bottom-20 text-4xl opacity-50 animate-bounce z-0" style={{ animationDuration: '3.5s', animationDelay: '1s' }}>
+              <div className="hidden lg:block absolute -left-12 bottom-20 text-4xl opacity-50 animate-bounce z-0" style={{ animationDuration: '3.5s', animationDelay: '1s' }}>
                 💬
               </div>
 
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 relative z-10">
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 relative z-10">
                 Parliamo del tuo<br />
                 <span className="text-accent font-mono">prossimo progetto_</span>
               </h2>
               
-              <p className="text-lg text-gray-600 mb-10 leading-relaxed relative z-10">
+              <p className="text-base md:text-lg text-gray-600 mb-8 md:mb-10 leading-relaxed relative z-10">
                 Sono sempre interessato a nuove opportunità e collaborazioni. Che tu abbia un'idea da realizzare o semplicemente voglia fare una chiacchierata, sarò felice di sentirti.
               </p>
 
@@ -1641,14 +1887,14 @@ export default function Home() {
               <div className="space-y-4 relative z-10">
                 {/* Email */}
                 <div className="flex items-center gap-4 group">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-md">
-                    <span className="text-3xl">📧</span>
+                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-md flex-shrink-0">
+                    <span className="text-2xl md:text-3xl">📧</span>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Email</p>
                     <a
                       href="mailto:info@retr0hub.dev?subject=Richiesta%20dal%20portfolio"
-                      className="text-accent font-medium text-lg"
+                      className="text-accent font-medium text-base md:text-lg truncate block"
                     >
                       info@retr0hub.dev
                     </a>
@@ -1657,23 +1903,23 @@ export default function Home() {
 
                 {/* LinkedIn */}
                 <div className="flex items-center gap-4 group">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-md">
-                    <span className="text-3xl">💼</span>
+                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-md flex-shrink-0">
+                    <span className="text-2xl md:text-3xl">💼</span>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">LinkedIn</p>
-                    <a href="https://linkedin.com/in/marco-simone-cannizzaro-582787283" target="_blank" rel="noopener noreferrer" className="text-accent font-medium text-lg">Marco Simone Cannizzaro</a>
+                    <a href="https://linkedin.com/in/marco-simone-cannizzaro-582787283" target="_blank" rel="noopener noreferrer" className="text-accent font-medium text-base md:text-lg truncate block">Marco Simone Cannizzaro</a>
                   </div>
                 </div>
 
                 {/* GitHub */}
                 <div className="flex items-center gap-4 group">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-md">
-                    <span className="text-3xl">🐙</span>
+                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-md flex-shrink-0">
+                    <span className="text-2xl md:text-3xl">🐙</span>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">GitHub</p>
-                    <a href="https://github.com/Retr0dev-jpg" target="_blank" rel="noopener noreferrer" className="text-accent font-medium text-lg">@Retr0dev-jpg</a>
+                    <a href="https://github.com/Retr0dev-jpg" target="_blank" rel="noopener noreferrer" className="text-accent font-medium text-base md:text-lg truncate block">@Retr0dev-jpg</a>
                   </div>
                 </div>
               </div>
@@ -1682,18 +1928,18 @@ export default function Home() {
             {/* Colonna Destra - Form */}
             <div className="relative">
               {/* Emoji decorative destra */}
-              <div className="absolute -right-12 top-20 text-5xl opacity-70 animate-bounce z-0" style={{ animationDuration: '3s', animationDelay: '0.3s' }}>
+              <div className="hidden lg:block absolute -right-12 top-20 text-5xl opacity-70 animate-bounce z-0" style={{ animationDuration: '3s', animationDelay: '0.3s' }}>
                 🚀
               </div>
-              <div className="absolute -right-16 top-60 text-4xl opacity-60 animate-bounce z-0" style={{ animationDuration: '3.5s', animationDelay: '0.8s' }}>
+              <div className="hidden lg:block absolute -right-16 top-60 text-4xl opacity-60 animate-bounce z-0" style={{ animationDuration: '3.5s', animationDelay: '0.8s' }}>
                 💡
               </div>
-              <div className="absolute -right-10 bottom-10 text-4xl opacity-50 animate-bounce z-0" style={{ animationDuration: '4s', animationDelay: '1.2s' }}>
+              <div className="hidden lg:block absolute -right-10 bottom-10 text-4xl opacity-50 animate-bounce z-0" style={{ animationDuration: '4s', animationDelay: '1.2s' }}>
                 ✨
               </div>
 
-              <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 relative z-10">
-                <h3 className="text-2xl font-bold mb-6 text-gray-900">Invia un messaggio</h3>
+              <div className="bg-white rounded-2xl shadow-xl p-5 md:p-8 border border-gray-100 relative z-10">
+                <h3 className="text-xl md:text-2xl font-bold mb-5 md:mb-6 text-gray-900">Invia un messaggio</h3>
                 
                 <form ref={formRef} onSubmit={handleContactSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

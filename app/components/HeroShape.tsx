@@ -254,6 +254,7 @@ export default function HeroShape({ shape, className = '' }: HeroShapeProps) {
             initial={shape === 'circle' ? { opacity: 0, scale: 0 } : false}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
+            style={{ transformBox: 'view-box', transformOrigin: '50% 50%' }}
           >
             {/* Orbite ellittiche animate e pallini sincronizzati */}
             {atomConfig.orbits.map((orbit, idx) => {
@@ -308,6 +309,7 @@ export default function HeroShape({ shape, className = '' }: HeroShapeProps) {
                           fill={particle.color}
                           filter="url(#atomGlow)"
                           onClick={handleNucleusClick}
+                          style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
                           initial={{ opacity: 0, scale: 0 }}
                           animate={{ 
                             opacity: 1, 
@@ -374,6 +376,7 @@ export default function HeroShape({ shape, className = '' }: HeroShapeProps) {
                 r={particle.r}
                 fill={particle.color}
                 filter="url(#atomGlow)"
+                style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
                 initial={{ opacity: 1, scale: 1 }}
                 animate={{ 
                   x: explosionDirections[idx].x - particle.x,
@@ -409,6 +412,7 @@ export default function HeroShape({ shape, className = '' }: HeroShapeProps) {
               r="30"
               fill="url(#blackHoleCenter)"
               filter="url(#blackHoleGlow)"
+              style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
               initial={{ scale: 0 }}
               animate={{ 
                 scale: particlesConsumed === 0 ? 0 : 0.5 + (particlesConsumed * 0.6), // Cresce con ogni particella
@@ -428,20 +432,20 @@ export default function HeroShape({ shape, className = '' }: HeroShapeProps) {
               fill="url(#blackHoleGradient)"
               initial={{ scale: 0, opacity: 0 }}
               animate={{ 
-                scale: particlesConsumed === 0 ? 0 : 0.8 + (particlesConsumed * 0.4), // Cresce con ogni particella
+                scale: particlesConsumed === 0 ? 0 : 0.8 + (particlesConsumed * 0.4),
                 opacity: particlesConsumed === 0 ? 0 : Math.min(0.4, 0.1 + particlesConsumed * 0.05),
                 rotate: 360,
                 transition: { 
                   duration: 0.3,
                   ease: "easeOut",
                   rotate: {
-                    duration: 15, // 15 secondi per rotazione completa
+                    duration: 15,
                     repeat: Infinity,
                     ease: "linear"
                   }
                 }
               }}
-              style={{ originX: '200px', originY: '200px' }}
+              style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
             />
             
             {/* Secondo anello di distorsione gravitazionale */}
@@ -460,13 +464,13 @@ export default function HeroShape({ shape, className = '' }: HeroShapeProps) {
                   duration: 0.3,
                   ease: "easeOut",
                   rotate: {
-                    duration: 25, // Rotazione opposta più lenta
+                    duration: 25,
                     repeat: Infinity,
                     ease: "linear"
                   }
                 }
               }}
-              style={{ originX: '200px', originY: '200px' }}
+              style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
             />
             
             {/* Atomi che vengono risucchiati */}
@@ -478,6 +482,7 @@ export default function HeroShape({ shape, className = '' }: HeroShapeProps) {
                 r={particle.r}
                 fill={particle.color}
                 filter="url(#atomGlow)"
+                style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
                 initial={{ opacity: 0.8, scale: 1.2 }}
                 animate={{ 
                   x: 200 - explosionDirections[idx].x,

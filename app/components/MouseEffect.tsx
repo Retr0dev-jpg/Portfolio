@@ -4,7 +4,36 @@ import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Lenis from 'lenis';
 
+function LenisProvider() {
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      autoRaf: true
+    });
+    return () => { lenis.destroy(); };
+  }, []);
+  return null;
+}
+
 export default function MouseEffect() {
+  const [isTouch, setIsTouch] = useState(false);
+
+  useEffect(() => {
+    setIsTouch(
+      'ontouchstart' in window || navigator.maxTouchPoints > 0
+    );
+  }, []);
+
+  if (isTouch) {
+    return <LenisProvider />;
+  }
+
+  return <MouseCursorEffect />;
+}
+
+function MouseCursorEffect() {
   const mouse = useRef({ x: 0, y: 0 });
   const pos = useRef({ x: 0, y: 0 });
   const smallPos = useRef({ x: 0, y: 0 });
@@ -400,7 +429,7 @@ export default function MouseEffect() {
     }
   }, [isOverDot]);
 
-  // useEffect per inizializzare Lenis e gestire scroll fluido
+  // useEffect per gestire lo scroll con middle mouse button tramite Lenis
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -413,15 +442,14 @@ export default function MouseEffect() {
 
     const smoothScroll = () => {
       if (isMiddleMousePressed && isVisible) {
-        const scrollSpeed = 5; // Velocità aumentata per scroll più rapido
+        const scrollSpeed = 5;
         const deltaX = Math.cos(orbitAngle.current) * scrollSpeed;
         const deltaY = Math.sin(orbitAngle.current) * scrollSpeed;
         
-        // Usa scrollTo di Lenis per uno scroll fluido
         lenis.scrollTo(window.scrollY + deltaY, { duration: 0.1, immediate: false });
         
         if (Math.abs(deltaX) > 0.1) {
-          window.scrollBy(deltaX, 0); // Scroll orizzontale con metodo nativo
+          window.scrollBy(deltaX, 0);
         }
       }
       

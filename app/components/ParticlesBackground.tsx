@@ -30,7 +30,10 @@ export default function ParticlesBackground() {
 
     const initParticles = () => {
       particles.current = [];
-      const particleCount = Math.min(Math.floor(window.innerWidth * 0.03), 100);
+      const isMobileScreen = window.innerWidth < 768;
+      const particleCount = isMobileScreen
+        ? Math.min(Math.floor(window.innerWidth * 0.015), 30)
+        : Math.min(Math.floor(window.innerWidth * 0.03), 100);
       
       for (let i = 0; i < particleCount; i++) {
         particles.current.push({
