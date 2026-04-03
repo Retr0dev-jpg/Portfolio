@@ -1,0 +1,472 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #ffffff;
+  --color-secondary: #f7f7f7;
+  --color-accent: #7C3AED;
+
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'Roboto Mono', monospace;
+
+  --animate-fade-in: fadeIn 0.7s ease-in forwards;
+  --animate-slide-up: slideUp 0.7s ease-out forwards;
+  --animate-slide-in: slideIn 0.7s ease-out forwards;
+  --animate-float-slow: floatUpDown 6s ease-in-out infinite;
+  --animate-float-medium: floatUpDown 5s ease-in-out infinite;
+  --animate-float-fast: floatUpDown 4s ease-in-out infinite;
+  --animate-float-alt: floatUpDownAlt 7s ease-in-out infinite;
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes slideUp {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes slideIn {
+    0% { transform: translateX(-20px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes floatUpDown {
+    0% { transform: translateY(0); }
+    25% { transform: translateY(-25px) rotate(5deg); }
+    50% { transform: translateY(0) rotate(0deg); }
+    75% { transform: translateY(25px) rotate(-5deg); }
+    100% { transform: translateY(0); }
+  }
+  @keyframes floatUpDownAlt {
+    0% { transform: translateY(0); }
+    25% { transform: translateY(25px) rotate(-5deg); }
+    50% { transform: translateY(0) rotate(0deg); }
+    75% { transform: translateY(-25px) rotate(5deg); }
+    100% { transform: translateY(0); }
+  }
+}
+
+:root {
+  --foreground-rgb: 30, 30, 30;
+  --background-rgb: 255, 255, 255;
+}
+
+html, body {
+  scroll-behavior: smooth;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* Internet Explorer/Edge */
+  user-select: none;         /* Standard */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE e Edge */
+  cursor: none !important;
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+  background: transparent !important;
+}
+
+/* Mostra il cursore predefinito su elementi interattivi per ragioni di usabilità */
+a, button, input, textarea, select, label, [role="button"] {
+  cursor: none !important;
+}
+
+/* Nascondi il cursore di sistema sui link dell'header, tranne il logo */
+header a.nav-link {
+  cursor: none !important;
+  position: relative;
+  transition: color 0.3s;
+  padding: 5px 0;
+}
+
+header a:hover {
+  color: var(--color-accent);
+}
+
+section {
+  min-height: 100vh;
+  padding: 5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.section-heading {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.section-heading::after {
+  content: '';
+  position: absolute;
+  bottom: -1rem;
+  left: 0;
+  width: 4rem;
+  height: 0.25rem;
+  background-color: var(--color-accent);
+}
+
+/* Animazioni per le emoji */
+@keyframes moveUpDown {
+  0% { transform: translateY(0) rotate(0); }
+  25% { transform: translateY(-30px) rotate(5deg); }
+  50% { transform: translateY(0) rotate(0); }
+  75% { transform: translateY(30px) rotate(-5deg); }
+  100% { transform: translateY(0) rotate(0); }
+}
+
+@keyframes moveDownUp {
+  0% { transform: translateY(0) rotate(0); }
+  25% { transform: translateY(30px) rotate(-5deg); }
+  50% { transform: translateY(0) rotate(0); }
+  75% { transform: translateY(-30px) rotate(5deg); }
+  100% { transform: translateY(0) rotate(0); }
+}
+
+.emoji-up-down-1 {
+  animation: moveUpDown 5s ease-in-out infinite;
+}
+
+.emoji-up-down-2 {
+  animation: moveUpDown 6s ease-in-out infinite 0.5s;
+}
+
+.emoji-up-down-3 {
+  animation: moveUpDown 4s ease-in-out infinite 0.7s;
+}
+
+.emoji-up-down-4 {
+  animation: moveUpDown 5s ease-in-out infinite 1.5s;
+}
+
+.emoji-down-up-1 {
+  animation: moveDownUp 7s ease-in-out infinite 1s;
+}
+
+.emoji-down-up-2 {
+  animation: moveDownUp 7s ease-in-out infinite 0.3s;
+} 
+
+/* Animazione cursore che lampeggia */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1s ease-in-out infinite;
+}
+
+/* Animazione hover per le singole parole */
+.hover-word {
+  transition: color 4s ease-out;
+}
+
+.hover-word:hover,
+.hover-word.word-active {
+  color: var(--color-accent);
+  transition: color 0.05s ease-in;
+}
+
+/* Animazione flip per le skills */
+.clickable-word {
+  transition: all 0.3s ease;
+}
+
+.clickable-word:hover {
+  color: var(--color-accent);
+}
+
+.word-flip {
+  display: inline-block;
+  transition: all 0.6s ease;
+}
+
+.word-flip.flipping {
+  animation: flipCalendar 0.6s ease-in-out;
+}
+
+@keyframes flipCalendar {
+  0% {
+    transform: rotateX(0deg);
+  }
+  50% {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+/* Container per le skills - evita a capo */
+.skills-container {
+  white-space: nowrap;
+  overflow: visible;
+  min-width: fit-content;
+}
+
+/* Skills Cards Styling */
+.skill-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f3f4f6;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+  width: 160px;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-color: var(--color-accent);
+}
+
+.skill-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, var(--color-accent), #9d4edd);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.skill-card:hover::before {
+  opacity: 0.05;
+}
+
+.skill-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  width: 100%;
+}
+
+.skill-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  margin-top: auto;
+}
+
+.skill-card:hover .skill-icon {
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(124, 58, 237, 0.3));
+}
+
+.skill-name {
+  color: #374151;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
+  line-height: 1.2;
+  transition: color 0.3s ease;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.skill-card:hover .skill-name {
+  color: var(--color-accent);
+}
+
+/* Skills Section Layout */
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.skills-category {
+  margin-bottom: 48px;
+}
+
+.skills-category h3 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 32px;
+  text-align: center;
+  color: var(--color-accent);
+  position: relative;
+}
+
+.skills-category h3::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-accent), #9d4edd);
+  border-radius: 2px;
+}
+
+/* Skills category titles on purple background */
+.skills-category h3.text-white::after {
+  background: linear-gradient(90deg, white, rgba(255, 255, 255, 0.8));
+}
+
+/* Custom Web Tech card hover effects */
+.skill-card:hover .icon-top-left,
+.skill-card:hover .icon-top-right,
+.skill-card:hover .icon-bottom-left,
+.skill-card:hover .icon-bottom-right {
+  transform: scale(1.1);
+}
+
+.skill-card:hover .icon-bottom-center {
+  transform: translate(-50%, 0) scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .skill-card {
+    width: 140px;
+    height: 140px;
+    padding: 20px;
+  }
+  
+  .skill-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .skill-name {
+    font-size: 14px;
+  }
+  
+  .skills-grid {
+    gap: 16px;
+  }
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Wavy underline animation for links (excluding header links) */
+a:not(header a) {
+  text-decoration: none !important;
+  position: relative;
+  background-image: none;
+  padding-bottom: 2px;
+}
+
+a:not(header a):hover {
+  text-decoration: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 4'%3E%3Cpath fill='none' stroke='%237C3AED' stroke-width='1.5' d='M0,2.5 Q2.5,0.5 5,2.5 T10,2.5 T15,2.5 T20,2.5'/%3E%3C/svg%3E");
+  background-size: 20px 4px;
+  background-repeat: repeat-x;
+  background-position: 0 calc(100% - 2px);
+  animation: wave 1.2s linear infinite;
+}
+
+@keyframes wave {
+  0% {
+    background-position: 0 calc(100% - 2px);
+  }
+  100% {
+    background-position: 20px calc(100% - 2px);
+  }
+}
+
+/* Effetto evidenziatore animato */
+.highlight-marker {
+  animation: highlightDraw 1s ease-in-out forwards;
+  transform-origin: left center;
+}
+
+.animate-highlight-draw {
+  animation: highlightDraw 1s ease-in-out forwards;
+  transform-origin: left center;
+}
+
+@keyframes highlightDraw {
+  0% {
+    transform: scaleX(0) rotate(-1deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: scaleX(1) rotate(-1deg);
+    opacity: 1;
+  }
+}
+
+/* Rimuovi completamente l'effetto di sottolineatura dai badge dei progetti */
+.group a[class*="absolute"][class*="bg-gray-900"],
+a[href*="github.com"].absolute {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-style: none !important;
+}
+
+.group a[class*="absolute"][class*="bg-gray-900"]:hover,
+a[href*="github.com"].absolute:hover {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-style: none !important;
+}
+
+/* Skill card shake animation */
+@keyframes skillPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px 10px rgba(124, 58, 237, 0.4);
+  }
+}
+
+.skill-card {
+  transition: transform 0.3s ease, box-shadow 0.5s ease, border-color 0.5s ease, opacity 0.5s ease;
+}
+
+.skill-card.shaking {
+  animation: skillPulse 1.2s ease-in-out infinite;
+  border-color: #7C3AED !important;
+  z-index: 10;
+}
+
+.skill-card.fading-out {
+  animation: skillPulse 1.2s ease-in-out infinite;
+  opacity: 0.5;
+  border-color: #7C3AED !important;
+}
