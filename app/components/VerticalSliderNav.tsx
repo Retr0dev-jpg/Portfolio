@@ -133,7 +133,7 @@ export default function VerticalSliderNav() {
   if (sections.length <= 1) return null; // Non mostrare se c'è solo una sezione
 
   return (
-    <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4 items-center">
+    <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col gap-4 items-center">
       {sections.map((_, idx) => (
         <button
           key={idx}
