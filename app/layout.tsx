@@ -1,7 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import MouseEffect from './components/MouseEffect'
-import ParticlesBackground from './components/ParticlesBackground'
+import MouseEffect from './components/effects/MouseEffect'
+import ParticlesBackground from './components/effects/ParticlesBackground'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 

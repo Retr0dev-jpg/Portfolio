@@ -20,19 +20,31 @@ Portfolio/
 │   │   └── contact/
 │   │       └── route.ts             # API Route Next.js per invio email via Resend
 │   ├── components/
-│   │   ├── AnimatedSection.tsx      # Wrapper animato per sezioni, con varianti direzionali
-│   │   ├── Header.tsx               # Header fixed con hamburger menu mobile e overlay full-screen
-│   │   ├── HeroShape.tsx            # Animazione atomo interattivo con transizione a buco nero
-│   │   ├── MouseEffect.tsx          # Cursore custom (desktop), Lenis smooth scroll, touch detection
-│   │   ├── VerticalSliderNav.tsx    # Slider verticale con pallini animati (nascosto su mobile)
-│   │   └── ParticlesBackground.tsx  # Canvas animato di particelle (ottimizzato per mobile)
+│   │   ├── effects/
+│   │   │   ├── MouseEffect.tsx      # Cursore custom (desktop), Lenis smooth scroll, touch detection
+│   │   │   └── ParticlesBackground.tsx  # Canvas animato di particelle (ottimizzato per mobile)
+│   │   ├── layout/
+│   │   │   ├── ConstructionBanner.tsx   # Banner "in costruzione" con countdown timer
+│   │   │   ├── FooterSection.tsx        # Footer con copyright
+│   │   │   ├── Header.tsx               # Header fixed con hamburger menu mobile e overlay
+│   │   │   └── VerticalSliderNav.tsx    # Slider verticale con pallini animati (nascosto su mobile)
+│   │   ├── sections/
+│   │   │   ├── AboutSection.tsx         # Chi sono + emoji decorative animate
+│   │   │   ├── ContactSection.tsx       # Form contatti + info (Email, LinkedIn, GitHub)
+│   │   │   ├── HeroSection.tsx          # Hero con skill rotation + testo interattivo
+│   │   │   ├── ProjectsSection.tsx      # Carousel progetti desktop + swipe mobile
+│   │   │   ├── SkillsSection.tsx        # Griglia 12 skill card con icone combinate
+│   │   │   └── WorksSection.tsx         # Timeline mobile / nodi draggabili desktop
+│   │   └── ui/
+│   │       ├── AnimatedSection.tsx      # Wrapper animato per sezioni, con varianti direzionali
+│   │       └── HeroShape.tsx            # Animazione atomo interattivo con transizione a buco nero
 │   ├── hooks/
-│   │   └── useIsMobile.ts          # Hook per rilevamento mobile (breakpoint) e touch device
+│   │   ├── useExtensionProtection.ts   # Protezione anti-estensioni browser + console message
+│   │   └── useIsMobile.ts             # Hook per rilevamento mobile (breakpoint) e touch device
 │   ├── globals.css                  # Stili globali, @theme Tailwind v4, media queries responsive
 │   ├── layout.tsx                   # Layout globale, font Google, MouseEffect, ParticlesBackground,
 │   │                                  Vercel Analytics e Speed Insights
-│   └── page.tsx                     # Pagina principale — tutte le sezioni con layout condizionale
-│                                      desktop/mobile
+│   └── page.tsx                     # Pagina principale — composizione di tutti i componenti
 │
 ├── public/
 │   ├── CV/
