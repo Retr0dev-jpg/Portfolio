@@ -4,14 +4,15 @@
 # Dependencies
 /node_modules
 
-# Next.js
-/.next/
-/out/
+# Next.js & TypeScript
+*.tsbuildinfo
 next-env.d.ts
+/.next/
 /build
+/out/
 
 # Environment variables
-.env
-.env.*
 !.env.example
 .env*.local
+.env.*
+.env

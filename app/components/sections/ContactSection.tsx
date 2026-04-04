@@ -1,6 +1,7 @@
 'use client';
 import { useState, useRef } from 'react';
 import AnimatedSection from '../ui/AnimatedSection';
+import ObfuscatedEmail from '../ui/ObfuscatedEmail';
 
 export default function ContactSection() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -68,12 +69,10 @@ export default function ContactSection() {
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Email</p>
-                  <a
-                    href="mailto:info@retr0hub.dev?subject=Richiesta%20dal%20portfolio"
+                  <ObfuscatedEmail
                     className="text-accent font-medium text-base md:text-lg truncate block"
-                  >
-                    info@retr0hub.dev
-                  </a>
+                    subject="Richiesta dal portfolio"
+                  />
                 </div>
               </div>
 

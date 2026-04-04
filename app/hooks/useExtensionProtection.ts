@@ -110,56 +110,15 @@ export function useExtensionProtection() {
 ║                    🕵️ Ciao, Curioso! 👋                     ║
 ╠══════════════════════════════════════════════════════════════╣
 ║                                                              ║
-║  Vedo che ti piace sbirciare sotto il cofano! 🔍             ║
-║  Rispetto la tua curiosità da sviluppatore 💻                ║
+║  Vedo che ti piace sbirciare sotto il cofano!                ║
+║  Rispetto la tua curiosità da sviluppatore                   ║
 ║                                                              ║
-║  Questo portfolio è stato realizzato con:                    ║
-║  • Next.js 14 + TypeScript                                   ║
-║  • Tailwind CSS per lo styling                               ║
-║  • Framer Motion per le animazioni                           ║
-║  • Tanto amore per i dettagli ❤️                             ║
+║  Trovi un bug o altro? Apri una issue su GitHub:             ║
+║  github.com/Retr0dev-jpg                                     ║
 ║                                                              ║
-║  Se vuoi collaborare o hai domande, contattami!              ║
-║  📧 Email: info@retr0.dev                                    ║
-║                                                              ║
-║  P.S. Il cursore personalizzato è la mia parte preferita 😉  ║
 ╚══════════════════════════════════════════════════════════════╝`;
 
     console.log('%c' + message, styles);
-    
-    const proTips = [
-      '💡 Pro tip: Prova a cliccare sulle mie skills sopra!',
-      '🎨 E hai notato la scia del mouse sul testo? Magico, vero?',
-      '🖱️ Il cursore cambia forma a seconda di dove lo posizioni!',
-      '✨ Ogni parola del paragrafo ha la sua animazione hover personalizzata!',
-      '🔄 Le skills si alternano in modo ciclico - scoprile tutte!',
-      '🎯 Hover sulle emoji della sezione About per vederle ballare!',
-      '⚡ Tutte le animazioni sono ottimizzate per le performance!',
-      '🎪 Ci sono easter egg nascosti in giro... li trovi tutti?',
-      '🌟 Il layout si adatta dinamicamente alle diverse lunghezze del testo!',
-      '🎨 Il color scheme è basato sul viola #7C3AED - il mio colore preferito!',
-      '🔍 Ogni dettaglio è stato pensato per l\'esperienza utente!'
-    ];
-
-    const tips = [
-      '🚀 Usa Ctrl+Shift+I per aprire/chiudere velocemente la console!',
-      '🎯 Questo sito non usa jQuery - tutto vanilla JS e React!',
-      '⚡ Zero librerie pesanti - solo quello che serve!',
-      '🎪 Il codice è completamente TypeScript per meno bug!',
-      '🌟 Framer Motion gestisce tutte le animazioni fluide!',
-      '🔮 La scia del mouse funziona anche sui touch device!'
-    ];
-    
-    const randomProTip = proTips[Math.floor(Math.random() * proTips.length)];
-    const randomTip = tips[Math.floor(Math.random() * tips.length)];
-    
-    setTimeout(() => {
-      console.log('%c' + randomProTip, 'color: #7C3AED; font-size: 14px; font-style: italic;');
-    }, 1000);
-
-    setTimeout(() => {
-      console.log('%c' + randomTip, 'color: #7C3AED; font-size: 14px; font-style: italic;');
-    }, 2000);
 
     return () => {
       console.error = originalError;

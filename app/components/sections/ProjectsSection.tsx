@@ -1,6 +1,7 @@
 'use client';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import AnimatedSection from '../ui/AnimatedSection';
+import { buildContactMailtoHref } from '@/app/lib/contactEmail';
 
 interface ProjectsProps {
   onShowStack: (stackIds: string[]) => void;
@@ -223,7 +224,12 @@ export default function ProjectsSection({ onShowStack }: ProjectsProps) {
                     </svg>
                   </button>
                   <button 
-                    onClick={() => window.open('mailto:info@retr0.dev?subject=Richiesta%20informazioni%20progetto%20Passoetiro', '_blank')}
+                    onClick={() =>
+                      window.open(
+                        buildContactMailtoHref('Richiesta informazioni progetto Passoetiro'),
+                        '_blank',
+                      )
+                    }
                     className="absolute top-2 left-10 w-7 h-7 bg-gray-900/40 backdrop-blur-sm rounded-md flex items-center justify-center transition-all duration-300 z-10 hover:bg-gray-900/60 hover:scale-110"
                   >
                     <span className="text-white text-xs font-bold">€</span>
