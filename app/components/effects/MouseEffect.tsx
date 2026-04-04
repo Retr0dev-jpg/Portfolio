@@ -21,9 +21,23 @@ export default function MouseEffect() {
   const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
-    setIsTouch(
-      'ontouchstart' in window || navigator.maxTouchPoints > 0
-    );
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    setIsTouch(isTouchDevice);
+
+    if (!isTouchDevice) {
+      document.documentElement.classList.add('has-fine-pointer');
+    }
+
+    const handleTouchStart = () => {
+      document.documentElement.classList.remove('has-fine-pointer');
+      setIsTouch(true);
+    };
+
+    window.addEventListener('touchstart', handleTouchStart, { once: true });
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      document.documentElement.classList.remove('has-fine-pointer');
+    };
   }, []);
 
   if (isTouch) {

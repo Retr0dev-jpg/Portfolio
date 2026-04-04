@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import Header from './components/layout/Header';
 import VerticalSliderNav from './components/layout/VerticalSliderNav';
 import ConstructionBanner from './components/layout/ConstructionBanner';
@@ -17,6 +17,7 @@ const SHOW_BANNER = true;
 export default function Home() {
   useExtensionProtection();
 
+  const [bannerHeight, setBannerHeight] = useState(SHOW_BANNER ? 36 : 0);
   const shakeTimeoutsRef = useRef<NodeJS.Timeout[]>([]);
   const activeShakingCardsRef = useRef<string[]>([]);
 
@@ -76,9 +77,9 @@ export default function Home() {
 
   return (
     <>
-      <ConstructionBanner visible={SHOW_BANNER} />
-      <main className={`min-h-screen overflow-x-hidden ${SHOW_BANNER ? 'pt-[36px]' : ''}`}>
-        <Header bannerVisible={SHOW_BANNER} />
+      <ConstructionBanner visible={SHOW_BANNER} onHeightChange={setBannerHeight} />
+      <main className="min-h-screen overflow-x-hidden" style={SHOW_BANNER ? { paddingTop: `${bannerHeight}px` } : undefined}>
+        <Header bannerHeight={SHOW_BANNER ? bannerHeight : 0} />
         <VerticalSliderNav />
         <HeroSection />
         <AboutSection />

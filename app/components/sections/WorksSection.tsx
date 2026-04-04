@@ -1,6 +1,5 @@
 'use client';
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { useIsMobile } from '../../hooks/useIsMobile';
 import AnimatedSection from '../ui/AnimatedSection';
 
 const nodeKeys = ['node1', 'node2', 'node3', 'node4', 'nodeCV'] as const;
@@ -8,7 +7,6 @@ type NodeId = typeof nodeKeys[number];
 type NodePositions = Record<NodeId, { x: number; y: number }>;
 
 export default function WorksSection() {
-  const isMobile = useIsMobile();
 
   const [nodePositions, setNodePositions] = useState<NodePositions>({
     node1: { x: 15, y: 30 },
@@ -114,8 +112,8 @@ export default function WorksSection() {
 
   return (
     <AnimatedSection id="works" title="Works" variant="right" showTitle={false}>
-      {isMobile ? (
-        <div className="w-full max-w-lg mx-auto px-2">
+      {/* Mobile: timeline verticale */}
+      <div className="md:hidden w-full max-w-lg mx-auto px-2">
           <div className="flex justify-center mb-10">
             <a
               href="/CV/CV_Marco_Simone_Cannizzaro.pdf"
@@ -131,16 +129,16 @@ export default function WorksSection() {
             </a>
           </div>
 
-          <div className="relative pl-8 border-l-2 border-accent/30 space-y-10">
+          <div className="relative pl-6 border-l-2 border-accent/30 space-y-10">
             {/* Nodo 1 - Metapack */}
             <div className="relative">
-              <div className="absolute -left-[25px] top-1 w-4 h-4 rounded-full bg-accent border-4 border-white shadow-md" />
+              <div className="absolute -left-[21px] top-1 w-4 h-4 rounded-full bg-accent border-4 border-white shadow-md" />
               <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                <div className="bg-gradient-to-r from-purple-500 to-purple-600 px-5 py-3">
-                  <h3 className="text-base font-bold text-white">Metapack Engineering Srl</h3>
+                <div className="bg-gradient-to-r from-purple-500 to-purple-600 px-4 py-3">
+                  <h3 className="text-sm font-bold text-white break-words">Metapack Engineering Srl</h3>
                   <p className="text-xs text-purple-100">Ottobre 2025 - Presente</p>
                 </div>
-                <div className="p-5">
+                <div className="p-4">
                   <p className="text-xs font-semibold text-accent uppercase tracking-wider mb-2">Software Specialist</p>
                   <p className="text-sm text-gray-700 leading-relaxed mb-3">
                     Sviluppo di applicazioni HMI in ambiente .NET (C#/VB.NET) per il monitoraggio e il controllo di processi industriali.
@@ -156,20 +154,20 @@ export default function WorksSection() {
 
             {/* Nodo 2 - Freelancer */}
             <div className="relative">
-              <div className="absolute -left-[25px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-white shadow-md" />
+              <div className="absolute -left-[21px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-white shadow-md" />
               <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-5 py-3">
-                  <h3 className="text-base font-bold text-white">Freelancer</h3>
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-3">
+                  <h3 className="text-sm font-bold text-white break-words">Freelancer</h3>
                   <p className="text-xs text-blue-100">Giugno 2025 - Ottobre 2025</p>
                 </div>
-                <div className="p-5">
+                <div className="p-4">
                   <p className="text-xs font-semibold text-accent uppercase tracking-wider mb-2">Freelance Developer</p>
                   <p className="text-sm text-gray-700 leading-relaxed mb-3">
                     Progettazione e realizzazione di prodotti digitali su misura: dal discovery al deploy, con focus su scalabilità, manutenibilità e valore per il business.
                   </p>
                   <div className="mb-3">
                     <p className="text-xs font-semibold text-gray-600 mb-1.5">Progetti realizzati:</p>
-                    <div className="space-y-0.5 text-sm text-gray-600">
+                    <div className="space-y-0.5 text-sm text-gray-600 break-all">
                       <div className="flex items-center gap-1">
                         <span className="text-gray-400">•</span>
                         <a href="https://new.molisebasket.net" target="_blank" rel="noopener noreferrer" className="text-blue-600">new.molisebasket.net</a>
@@ -201,13 +199,13 @@ export default function WorksSection() {
 
             {/* Nodo 3 - Diploma */}
             <div className="relative">
-              <div className="absolute -left-[25px] top-1 w-4 h-4 rounded-full bg-orange-500 border-4 border-white shadow-md" />
+              <div className="absolute -left-[21px] top-1 w-4 h-4 rounded-full bg-orange-500 border-4 border-white shadow-md" />
               <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-5 py-3">
-                  <h3 className="text-base font-bold text-white">Diploma</h3>
+                <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-3">
+                  <h3 className="text-sm font-bold text-white break-words">Diploma</h3>
                   <p className="text-xs text-orange-100">2020 - 2025 | IIS Galilei Sani, Latina</p>
                 </div>
-                <div className="p-5">
+                <div className="p-4">
                   <p className="text-sm text-gray-700 leading-relaxed mb-3">
                     Indirizzo Informatica e Telecomunicazioni (sviluppo base di software, siti web, reti e sistemi informatici).
                   </p>
@@ -223,13 +221,13 @@ export default function WorksSection() {
 
             {/* Nodo 4 - PCTO MTECH */}
             <div className="relative">
-              <div className="absolute -left-[25px] top-1 w-4 h-4 rounded-full bg-green-500 border-4 border-white shadow-md" />
+              <div className="absolute -left-[21px] top-1 w-4 h-4 rounded-full bg-green-500 border-4 border-white shadow-md" />
               <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                <div className="bg-gradient-to-r from-green-500 to-green-600 px-5 py-3">
-                  <h3 className="text-base font-bold text-white">Apprendista Tecnico di Laboratorio</h3>
+                <div className="bg-gradient-to-r from-green-500 to-green-600 px-4 py-3">
+                  <h3 className="text-sm font-bold text-white break-words">Apprendista Tecnico di Laboratorio</h3>
                   <p className="text-xs text-green-100">Giugno 2024 - Agosto 2024 | MTECH SOLUTIONS Srl</p>
                 </div>
-                <div className="p-5">
+                <div className="p-4">
                   <p className="text-sm text-gray-700 leading-relaxed mb-3">
                     Setup tecnico di workstation e periferiche, diagnostica sistemistica e supporto utente in ambito IT.
                   </p>
@@ -241,10 +239,11 @@ export default function WorksSection() {
                 </div>
               </div>
             </div>
-          </div>
         </div>
-      ) : (
-        <div id="works-container" className="relative w-full max-w-7xl mx-auto pt-24 pb-16" style={{ minHeight: '620px' }}>
+      </div>
+
+      {/* Desktop: nodi draggabili */}
+      <div id="works-container" className="hidden md:block relative w-full max-w-7xl mx-auto pt-24 pb-16" style={{ minHeight: '620px' }}>
           <svg className="absolute inset-0 w-full h-full z-0" style={{ pointerEvents: 'none' }}>
             <defs>
               <linearGradient id="professionalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -542,9 +541,8 @@ export default function WorksSection() {
                 <p className="text-xs text-gray-500 text-center">05/09/2025 · PDF</p>
               </div>
             </div>
-          </div>
         </div>
-      )}
+      </div>
     </AnimatedSection>
   );
 }

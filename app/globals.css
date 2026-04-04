@@ -5,8 +5,8 @@
   --color-secondary: #f7f7f7;
   --color-accent: #7C3AED;
 
-  --font-sans: 'Inter', sans-serif;
-  --font-mono: 'Roboto Mono', monospace;
+  --font-sans: var(--font-inter, 'Inter', sans-serif);
+  --font-mono: var(--font-roboto-mono, 'Roboto Mono', monospace);
 
   --animate-fade-in: fadeIn 0.7s ease-in forwards;
   --animate-slide-up: slideUp 0.7s ease-out forwards;
@@ -62,7 +62,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  html, body {
+  html.has-fine-pointer, html.has-fine-pointer body {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -70,11 +70,17 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
     cursor: none !important;
   }
 
-  a, button, input, textarea, select, label, [role="button"] {
+  html.has-fine-pointer a,
+  html.has-fine-pointer button,
+  html.has-fine-pointer input,
+  html.has-fine-pointer textarea,
+  html.has-fine-pointer select,
+  html.has-fine-pointer label,
+  html.has-fine-pointer [role="button"] {
     cursor: none !important;
   }
 
-  header a.nav-link {
+  html.has-fine-pointer header a.nav-link {
     cursor: none !important;
   }
 }
@@ -91,6 +97,7 @@ header a:hover {
 
 section {
   min-height: 100vh;
+  min-height: 100dvh;
   padding: 3rem 1rem;
   display: flex;
   flex-direction: column;
@@ -390,8 +397,8 @@ section {
 
 @media (max-width: 480px) {
   .skill-card {
-    width: 105px;
-    height: 105px;
+    width: clamp(90px, 28vw, 105px);
+    height: clamp(90px, 28vw, 105px);
     padding: 12px;
     border-radius: 12px;
   }
@@ -409,7 +416,7 @@ section {
     gap: 10px;
   }
 
-  .skill-card .relative.w-20.h-20 {
+  .skill-card .skill-icon-container {
     width: 52px;
     height: 52px;
   }
@@ -430,6 +437,8 @@ section {
     white-space: normal;
     overflow: visible;
     min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 }
 

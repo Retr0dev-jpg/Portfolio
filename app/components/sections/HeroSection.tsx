@@ -94,7 +94,7 @@ export default function HeroSection() {
   }, [pausedSkills, rotateWord]);
 
   return (
-    <section id="home" className="h-screen flex items-center bg-white">
+    <section id="home" className="min-h-screen min-h-dvh flex items-center bg-white">
       <div className="container mx-auto px-4">
         <div className="max-w-xl mx-auto md:mx-0 md:ml-[210px] relative">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 animate-fade-in">
@@ -102,7 +102,7 @@ export default function HeroSection() {
               Retr0<span className="animate-blink">_</span>
             </span>
           </h1>
-          <p className="text-lg md:text-2xl mb-6 opacity-0 animate-slide-up text-gray-700 skills-container" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
+          <p className="text-base md:text-2xl mb-6 opacity-0 animate-slide-up text-gray-700 skills-container" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
             <span 
               className="clickable-word"
               onClick={() => rotateWord('skill1')}

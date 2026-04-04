@@ -14,6 +14,7 @@ type Particle = {
 export default function ParticlesBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particles = useRef<Particle[]>([]);
+  const animFrameId = useRef<number>(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -57,11 +58,9 @@ export default function ParticlesBackground() {
         ctx.globalAlpha = 0.25;
         ctx.fill();
         
-        // Aggiorna la posizione
         particle.x += particle.speedX;
         particle.y += particle.speedY;
         
-        // Bounce se colpisce i bordi
         if (particle.x > canvas.width || particle.x < 0) {
           particle.speedX = -particle.speedX;
         }
@@ -70,7 +69,6 @@ export default function ParticlesBackground() {
           particle.speedY = -particle.speedY;
         }
         
-        // Disegna linee tra particelle vicine
         for (let j = index + 1; j < particles.current.length; j++) {
           const dx = particles.current[j].x - particle.x;
           const dy = particles.current[j].y - particle.y;
@@ -88,15 +86,16 @@ export default function ParticlesBackground() {
         }
       });
       
-      requestAnimationFrame(drawParticles);
+      animFrameId.current = requestAnimationFrame(drawParticles);
     };
 
     handleResize();
     window.addEventListener('resize', handleResize);
-    drawParticles();
+    animFrameId.current = requestAnimationFrame(drawParticles);
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animFrameId.current);
     };
   }, []);
 

@@ -11,7 +11,7 @@ const navItems = [
   { name: 'Contact', href: '#contact' },
 ];
 
-export default function Header({ bannerVisible = false }: { bannerVisible?: boolean }) {
+export default function Header({ bannerHeight = 0 }: { bannerHeight?: number }) {
   const [activeSection, setActiveSection] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -58,10 +58,8 @@ export default function Header({ bannerVisible = false }: { bannerVisible?: bool
   return (
     <>
       <header className={`fixed left-0 w-full z-50 transition-all duration-300 ${
-        bannerVisible ? 'top-[36px]' : 'top-0'
-      } ${
         scrolled ? 'bg-white/90 shadow-sm backdrop-blur-sm py-4' : 'bg-transparent py-4 md:py-6'
-      }`}>
+      }`} style={{ top: `${bannerHeight}px` }}>
         <div className="container mx-auto px-4 flex justify-between items-center max-w-7xl">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -107,7 +105,7 @@ export default function Header({ bannerVisible = false }: { bannerVisible?: bool
 
           {/* Mobile hamburger button */}
           <button
-            className="md:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-1.5 z-[60]"
+            className="md:hidden relative w-11 h-11 flex flex-col items-center justify-center gap-1.5 z-[60]"
             onClick={() => setMobileMenuOpen(prev => !prev)}
             aria-label={mobileMenuOpen ? 'Chiudi menu' : 'Apri menu'}
           >
