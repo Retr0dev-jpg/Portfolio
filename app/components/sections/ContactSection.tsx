@@ -1,15 +1,18 @@
 'use client';
 import { useState, useRef } from 'react';
+import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 import AnimatedSection from '../ui/AnimatedSection';
 import ObfuscatedEmail from '../ui/ObfuscatedEmail';
 
 export default function ContactSection() {
   const formRef = useRef<HTMLFormElement>(null);
+  const turnstileRef = useRef<TurnstileInstance>(null);
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formRef.current || formStatus === 'sending') return;
+    if (!formRef.current || formStatus === 'sending' || !turnstileToken) return;
 
     const formData = new FormData(formRef.current);
 
@@ -23,16 +26,20 @@ export default function ContactSection() {
           email: formData.get('from_email'),
           subject: formData.get('subject'),
           message: formData.get('message'),
+          turnstileToken,
         }),
       });
 
       if (!res.ok) throw new Error('Invio fallito');
 
       setFormStatus('success');
+      setTurnstileToken(null);
       formRef.current.reset();
       setTimeout(() => setFormStatus('idle'), 5000);
     } catch {
       setFormStatus('error');
+      setTurnstileToken(null);
+      turnstileRef.current?.reset();
       setTimeout(() => setFormStatus('idle'), 5000);
     }
   };
@@ -122,6 +129,7 @@ export default function ContactSection() {
                       id="name"
                       name="from_name"
                       required
+                      maxLength={100}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent focus:bg-white transition-all" 
                       placeholder="Il tuo nome"
                     />
@@ -133,6 +141,7 @@ export default function ContactSection() {
                       id="email"
                       name="from_email"
                       required
+                      maxLength={320}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent focus:bg-white transition-all" 
                       placeholder="La tua email"
                     />
@@ -146,6 +155,7 @@ export default function ContactSection() {
                     id="subject"
                     name="subject"
                     required
+                    maxLength={200}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent focus:bg-white transition-all" 
                     placeholder="Di cosa vuoi parlare?"
                   />
@@ -157,11 +167,21 @@ export default function ContactSection() {
                     id="message"
                     name="message"
                     required
+                    maxLength={5000}
                     rows={6} 
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent focus:bg-white transition-all resize-none" 
                     placeholder="Raccontami la tua idea o il tuo progetto..."
                   ></textarea>
                 </div>
+
+                <Turnstile
+                  ref={turnstileRef}
+                  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                  onSuccess={setTurnstileToken}
+                  onExpire={() => setTurnstileToken(null)}
+                  onError={() => setTurnstileToken(null)}
+                  options={{ theme: 'light', refreshExpired: 'auto' }}
+                />
 
                 {formStatus === 'success' && (
                   <div className="px-4 py-3 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm font-medium">
@@ -176,7 +196,7 @@ export default function ContactSection() {
                 
                 <button 
                   type="submit"
-                  disabled={formStatus === 'sending'}
+                  disabled={formStatus === 'sending' || !turnstileToken}
                   className="w-full px-6 py-4 bg-accent text-white rounded-lg hover:bg-accent/90 transition-all duration-300 font-semibold text-base shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center gap-2 group disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   {formStatus === 'sending' ? (

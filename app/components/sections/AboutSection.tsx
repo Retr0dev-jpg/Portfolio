@@ -24,7 +24,7 @@ export default function AboutSection() {
             Costruisco interfacce HMI per sistemi industriali e prodotti web — minimalisti per design, solidi nell&apos;architettura.
           </p>
         </div>
-        <p className="text-white text-sm md:text-base italic font-light">
+        <p className="text-white text-sm md:text-base italic font-normal">
           Il buon codice non si vede: si sente. E ogni bug trovato in dev vale più di mille scuse in prod.
         </p>
       </div>

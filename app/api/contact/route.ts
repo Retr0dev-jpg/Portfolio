@@ -1,16 +1,84 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { z } from 'zod';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+const contactSchema = z.object({
+  name: z.string().trim().min(1).max(100),
+  email: z.email().max(320),
+  subject: z.string().trim().min(1).max(200)
+    .transform(v => v.replace(/[\r\n]/g, '')),
+  message: z.string().trim().min(1).max(5000),
+  turnstileToken: z.string().min(1),
+});
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+const rateMap = new Map<string, number[]>();
+const WINDOW_MS = 15 * 60 * 1000;
+const MAX_REQUESTS = 3;
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const timestamps = (rateMap.get(ip) ?? []).filter(t => now - t < WINDOW_MS);
+  if (timestamps.length >= MAX_REQUESTS) return true;
+  timestamps.push(now);
+  rateMap.set(ip, timestamps);
+  return false;
+}
+
+function getClientIp(req: Request): string {
+  return (
+    req.headers.get('X-Forwarded-For')?.split(',')[0]?.trim() ??
+    req.headers.get('X-Real-IP') ??
+    'unknown'
+  );
+}
+
 export async function POST(req: Request) {
   try {
-    const { name, email, subject, message } = await req.json();
+    const ip = getClientIp(req);
 
-    if (!name || !email || !subject || !message) {
+    if (isRateLimited(ip)) {
       return NextResponse.json(
-        { error: 'Tutti i campi sono obbligatori.' },
+        { error: 'Troppi messaggi inviati. Riprova tra qualche minuto.' },
+        { status: 429 },
+      );
+    }
+
+    const body = await req.json();
+    const parsed = contactSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: 'Dati non validi.', details: parsed.error.flatten().fieldErrors },
         { status: 400 },
+      );
+    }
+
+    const { name, email, subject, message, turnstileToken } = parsed.data;
+
+    const secret = process.env.TURNSTILE_SECRET_KEY ?? '1x0000000000000000000000000000000AA';
+
+    const tsRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret, response: turnstileToken, remoteip: ip }),
+    });
+    const tsData = await tsRes.json();
+
+    if (!tsData.success) {
+      return NextResponse.json(
+        { error: 'Verifica Turnstile fallita. Riprova.' },
+        { status: 403 },
       );
     }
 
@@ -23,13 +91,10 @@ export async function POST(req: Request) {
       minute: '2-digit',
     });
 
-    const escapedName    = name.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    const escapedEmail   = email.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    const escapedSubject = subject.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    const escapedMessage = message
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/\n/g, '<br>');
+    const escapedName = escapeHtml(name);
+    const escapedEmail = escapeHtml(email);
+    const escapedSubject = escapeHtml(subject);
+    const escapedMessage = escapeHtml(message).replace(/\n/g, '<br>');
 
     await resend.emails.send({
       from: process.env.RESEND_FROM!,

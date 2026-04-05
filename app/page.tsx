@@ -1,18 +1,20 @@
 'use client';
 import { useCallback, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Header from './components/layout/Header';
 import VerticalSliderNav from './components/layout/VerticalSliderNav';
 import ConstructionBanner from './components/layout/ConstructionBanner';
 import HeroSection from './components/sections/HeroSection';
 import AboutSection from './components/sections/AboutSection';
-import WorksSection from './components/sections/WorksSection';
-import SkillsSection from './components/sections/SkillsSection';
-import ProjectsSection from './components/sections/ProjectsSection';
-import ContactSection from './components/sections/ContactSection';
-import FooterSection from './components/layout/FooterSection';
 import { useExtensionProtection } from './hooks/useExtensionProtection';
 
-const SHOW_BANNER = true;
+const WorksSection = dynamic(() => import('./components/sections/WorksSection'));
+const SkillsSection = dynamic(() => import('./components/sections/SkillsSection'));
+const ProjectsSection = dynamic(() => import('./components/sections/ProjectsSection'));
+const ContactSection = dynamic(() => import('./components/sections/ContactSection'));
+const FooterSection = dynamic(() => import('./components/layout/FooterSection'));
+
+const SHOW_BANNER = process.env.NEXT_PUBLIC_SHOW_BANNER === 'true';
 
 export default function Home() {
   useExtensionProtection();

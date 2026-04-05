@@ -22,9 +22,9 @@ export default function SkillsSection() {
           <div id="skill-backend" className="skill-card">
             <div className="skill-card-content">
               <div className="relative w-20 h-20 mt-auto skill-icon-container">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" className="absolute top-1 left-1 w-8 h-8 transition-all duration-300 icon-top-left" draggable="false" />
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg" alt="Go" className="absolute top-1 right-1 w-8 h-8 transition-all duration-300 icon-top-right" draggable="false" />
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/django/django-plain.svg" alt="Django" className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-8 transition-all duration-300 z-10 icon-bottom-center" draggable="false" />
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" className="absolute top-1 left-1 w-7 h-7 transition-all duration-300 icon-top-left" draggable="false" />
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg" alt="Go" className="absolute top-1 right-1 w-7 h-7 transition-all duration-300 icon-top-right" draggable="false" />
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg" alt="Rust" className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-7 h-7 transition-all duration-300 z-10 icon-bottom-center" draggable="false" />
               </div>
               <span className="skill-name">Backend</span>
             </div>
@@ -37,7 +37,7 @@ export default function SkillsSection() {
                 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-original.svg" alt="WordPress" className="absolute top-1 left-1 w-7 h-7 transition-all duration-300 icon-top-left" draggable="false" />
                 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg" alt="Nginx" className="absolute top-1 right-1 w-7 h-7 transition-all duration-300 icon-top-right" draggable="false" />
                 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apache/apache-original.svg" alt="Apache" className="absolute bottom-1 left-1 w-7 h-7 transition-all duration-300 icon-bottom-left" draggable="false" />
-                <img src="/hostinger-icon.svg" alt="Hostinger" className="absolute bottom-1 right-1 w-7 h-7 transition-all duration-300 icon-bottom-right" draggable="false" />
+                <img src="/icons/hostinger.svg" alt="Hostinger" className="absolute bottom-1 right-1 w-7 h-7 transition-all duration-300 icon-bottom-right" draggable="false" />
               </div>
               <span className="skill-name">Hosting</span>
             </div>
@@ -109,11 +109,14 @@ export default function SkillsSection() {
             </div>
           </div>
           
-          {/* VS Code */}
+          {/* Editor */}
           <div id="skill-vscode" className="skill-card">
             <div className="skill-card-content">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" alt="VS Code" className="skill-icon" />
-              <span className="skill-name">VS Code</span>
+              <div className="relative w-20 h-20 mt-auto skill-icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/intellij/intellij-original.svg" alt="IntelliJ" className="absolute top-1 left-1 w-9 h-9 transition-all duration-300 icon-top-left" draggable="false" />
+                <img src="/icons/cursor.svg" alt="Cursor" className="absolute bottom-1 right-1 w-9 h-9 transition-all duration-300 icon-bottom-right" draggable="false" />
+              </div>
+              <span className="skill-name">Editor</span>
             </div>
           </div>
           

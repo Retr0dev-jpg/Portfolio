@@ -194,7 +194,8 @@ export default function WorksSection() {
               </div>
               <div className="flex flex-wrap gap-1.5">
                 <span className="px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded-md font-medium">React</span>
-                <span className="px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded-md font-medium">Next.js</span>
+                <span className="px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded-md font-medium">Hosting</span>
+                <span className="px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded-md font-medium">Wordpress</span>
                 <span className="px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded-md font-medium">Web Design</span>
               </div>
             </div>
@@ -475,7 +476,8 @@ export default function WorksSection() {
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">React</span>
-                    <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">Next.js</span>
+                    <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">Hosting</span>
+                    <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">Wordpress</span>
                     <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">Web Design</span>
                   </div>
                 </div>
