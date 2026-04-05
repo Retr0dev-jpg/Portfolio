@@ -11,9 +11,23 @@ export default function AboutSection() {
         ⚙️
       </div>
 
-      <p className="text-white text-xl md:text-2xl text-center max-w-2xl mx-auto z-10 px-6">
-        Sono uno sviluppatore web con una forte passione per il design minimalista e le esperienze digitali essenziali. Credo che la semplicità sia la chiave per un web moderno, accessibile e bello.
-      </p>
+      <div className="flex flex-col items-center text-center z-10 px-6 max-w-lg mx-auto gap-5">
+        <h2 className="text-white font-mono text-3xl md:text-4xl font-bold tracking-tight leading-snug">
+          Marco Simone Cannizzaro
+        </h2>
+        <div className="w-10 h-px bg-white/25" />
+        <div className="flex flex-col gap-3">
+          <p className="text-white/70 text-sm md:text-base leading-relaxed">
+            Classe 2007. Scrivo codice da quando capire come funzionano le cose era più forte di qualsiasi altra distrazione.
+          </p>
+          <p className="text-white/70 text-sm md:text-base leading-relaxed">
+            Costruisco interfacce HMI per sistemi industriali e prodotti web — minimalisti per design, solidi nell&apos;architettura.
+          </p>
+        </div>
+        <p className="text-white text-sm md:text-base italic font-light">
+          Il buon codice non si vede: si sente. E ogni bug trovato in dev vale più di mille scuse in prod.
+        </p>
+      </div>
 
       <div className="absolute right-4 md:right-20 top-1/3 text-3xl md:text-7xl rotate-[15deg] drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)] opacity-30 md:opacity-70 emoji-up-down-3">
         🎨

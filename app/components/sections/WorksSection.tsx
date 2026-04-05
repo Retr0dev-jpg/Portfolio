@@ -113,23 +113,21 @@ export default function WorksSection() {
   return (
     <AnimatedSection id="works" title="Works" variant="right" showTitle={false}>
       {/* Mobile: timeline verticale */}
-      <div className="md:hidden w-full max-w-lg mx-auto px-2">
+      <div className="md:hidden w-full">
           <div className="flex justify-center mb-10">
-            <a
-              href="/CV/CV_Marco_Simone_Cannizzaro.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white rounded-2xl shadow-lg border border-gray-200 text-accent font-semibold text-sm hover:shadow-xl transition-all"
+            <button
+              onClick={() => window.open('/CV/CV_Marco_Simone_Cannizzaro.pdf', '_blank', 'noopener,noreferrer')}
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white rounded-2xl shadow-lg border border-gray-200 text-accent font-semibold text-sm active:scale-95 transition-all"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v12m0 0l-4-4m4 4l4-4m-9 9h10" />
               </svg>
               Scarica CV
               <span className="text-xs text-gray-500 font-normal">PDF</span>
-            </a>
+            </button>
           </div>
 
-          <div className="relative pl-6 border-l-2 border-accent/30 space-y-10">
+          <div className="relative max-w-lg mx-auto px-2 pl-6 border-l-2 border-accent/30 space-y-10">
             {/* Nodo 1 - Metapack */}
             <div className="relative">
               <div className="absolute -left-[21px] top-1 w-4 h-4 rounded-full bg-accent border-4 border-white shadow-md" />

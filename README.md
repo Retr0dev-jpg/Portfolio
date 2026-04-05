@@ -1,6 +1,6 @@
 # Retr0_ Portfolio
 
-Un portfolio web moderno, minimalista e **tecnicamente avanzato**. Progettato per offrire un'esperienza utente fluida, animazioni accattivanti e una struttura del codice pulita e scalabile.
+Un portfolio web moderno e minimalista. Progettato per offrire un'esperienza utente fluida, transizioni moderne e una struttura del codice pulita e scalabile.
 
 ---
 
@@ -126,32 +126,6 @@ Portfolio/
 
 ---
 
-## 📱 Design Responsive
-
-Il portfolio implementa un design responsive completo con approcci diversi per desktop e mobile:
-
-| Area | Desktop | Mobile |
-| --- | --- | --- |
-| **Navigazione** | Header con link inline | Hamburger menu + overlay full-screen |
-| **Cursore** | Cursore custom animato + middle-click scroll | Cursore di sistema, smooth scroll via Lenis |
-| **Hero** | Testo + atomo interattivo a destra | Testo centrato, atomo nascosto |
-| **About** | Emoji decorative animate ai lati | Emoji nascoste, padding ridotto |
-| **Works** | Nodi draggabili con hover | Timeline verticale statica con card |
-| **Skills** | Card 160×160px, griglia ampia | Card scalate (140px / 105px), griglia adattiva |
-| **Projects** | Carousel con frecce, larghezza fissa | Scroll orizzontale snap con card 280px |
-| **Contact** | Emoji decorative, form ampio | Emoji nascoste, form adattivo con link troncati |
-| **Slider nav** | Pallini verticali a destra | Nascosto |
-| **Particelle** | Fino a 100 particelle | Max 30 particelle |
-
-### Strategie adottate
-
-- **CSS Media Queries**: `@media (hover: hover) and (pointer: fine)` per isolare features desktop-only (cursore custom, `user-select: none`).
-- **Conditional Rendering**: sezioni come Works e Projects renderizzano layout completamente diversi tramite `useIsMobile()`.
-- **Tailwind Responsive**: classi `hidden md:block`, `md:flex`, `text-lg md:text-2xl` ecc. per adattamento fluido.
-- **Performance**: particelle ridotte e shape SVG nascoste su schermi piccoli.
-
----
-
 ## 🧩 Sezioni della Pagina
 
 - **Home**: Hero con presentazione, claim animato e shape interattiva (desktop). Su mobile il testo è centrato con skills container wrappabile.
@@ -217,3 +191,13 @@ Il portfolio implementa un design responsive completo con approcci diversi per d
 | `typescript`                  | ^5.9     | Type safety                           |
 | `@vercel/analytics`           | ^2       | Vercel Web Analytics                  |
 | `@vercel/speed-insights`      | ^2       | Vercel Speed Insights (Core Web Vitals) |
+
+---
+
+## 📄 Licenza
+
+Questo progetto è distribuito sotto **GNU General Public License v3.0 (GPL-3.0)**.
+
+In sintesi: puoi usare, studiare, modificare e ridistribuire il codice, ma **qualsiasi lavoro derivato deve essere rilasciato con la stessa licenza GPL-3.0** e il codice sorgente deve restare pubblico. Non è consentito l'uso in prodotti proprietari senza rispettare questi termini.
+
+Vedi il file [`LICENSE`](./LICENSE) per il testo completo.

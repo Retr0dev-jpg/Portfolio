@@ -29,7 +29,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: 'Retr0_ Portfolio',
-  description: 'Minimal and clean portfolio website',
+  description: 'Portfolio di Marco Simone Cannizzaro — Full-stack developer, HMI specialist, codename Retr0_. If I can script it, I will.',
 }
 
 export default function RootLayout({

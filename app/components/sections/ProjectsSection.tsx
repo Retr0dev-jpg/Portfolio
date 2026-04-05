@@ -1,5 +1,6 @@
 'use client';
 import { useState, useCallback, useEffect, useRef, type ReactNode } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedSection from '../ui/AnimatedSection';
 import { buildContactMailtoHref } from '@/app/lib/contactEmail';
 
@@ -13,8 +14,9 @@ interface ProjectData {
   icon: ReactNode;
   url?: string;
   urlAction?: () => void;
+  comingSoon?: boolean;
   stackIds?: string[];
-  extraButtons?: { action: () => void; label: ReactNode; position: string }[];
+  extraButtons?: { action?: () => void; label: ReactNode; position: string; isTag?: boolean }[];
 }
 
 const LinkIcon = () => (
@@ -38,7 +40,7 @@ const PROJECTS: ProjectData[] = [
     gradient: 'from-slate-100 to-slate-200',
     overlay: 'from-indigo-400/20 to-slate-500/20',
     icon: <path d="M4 3a1 1 0 000 2h1v10H4a1 1 0 000 2h12a1 1 0 000-2h-1V5h1a1 1 0 000-2H4zm5 2v10h2V5H9z" />,
-    url: 'https://lab.retr0hub.dev',
+    comingSoon: true,
     stackIds: ['frontend', 'backend', 'containers', 'databases', 'hosting', 'git'],
   },
   {
@@ -63,9 +65,9 @@ const PROJECTS: ProjectData[] = [
     url: 'https://passoetiro.com',
     stackIds: ['hosting', 'databases', 'php'],
     extraButtons: [{
-      action: () => window.open(buildContactMailtoHref('Richiesta informazioni progetto Passoetiro'), '_blank'),
       label: <span className="text-white text-xs font-bold">€</span>,
       position: 'left-12',
+      isTag: true,
     }],
   },
   {
@@ -78,6 +80,11 @@ const PROJECTS: ProjectData[] = [
     icon: <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />,
     url: 'https://new.molisebasket.net',
     stackIds: ['hosting', 'databases'],
+    extraButtons: [{
+      label: <span className="text-white text-xs font-bold">€</span>,
+      position: 'left-12',
+      isTag: true,
+    }],
   },
   {
     name: 'Deskit',
@@ -87,7 +94,7 @@ const PROJECTS: ProjectData[] = [
     gradient: 'from-green-100 to-green-200',
     overlay: 'from-green-400/20 to-emerald-400/20',
     icon: <><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fillRule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 102 0V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" /></>,
-    url: 'https://deskit.svago.online',
+    comingSoon: true,
     stackIds: ['frontend', 'hosting', 'php', 'git'],
   },
 ];
@@ -105,6 +112,8 @@ export default function ProjectsSection({ onShowStack }: ProjectsProps) {
   const projectsContainerRef = useRef<HTMLDivElement>(null);
   const isProgrammaticScroll = useRef(false);
   const [devTooltip, setDevTooltip] = useState<{ x: number; y: number } | null>(null);
+  const [comingSoonTooltip, setComingSoonTooltip] = useState<{ x: number; y: number } | null>(null);
+  const [expandedMobile, setExpandedMobile] = useState<string | null>(null);
 
   const totalProjects = PROJECTS.length;
   const visibleProjects = 4;
@@ -153,9 +162,14 @@ export default function ProjectsSection({ onShowStack }: ProjectsProps) {
     setDevTooltip({ x: rect.left + rect.width / 2, y: rect.top - 32 });
   };
 
+  const showComingSoonTooltip = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setComingSoonTooltip({ x: rect.left + rect.width / 2, y: rect.top - 32 });
+  };
+
   return (
     <>
-      <AnimatedSection id="projects" title="Projects" variant="left" showTitle={false}>
+      <AnimatedSection id="projects" title="Projects" variant="left" showTitle={false} className="max-md:!min-h-fit max-md:!py-10">
         <div className="max-w-6xl mx-auto mb-8 md:mb-12">
           <h2 className="text-3xl md:text-5xl font-bold text-center">
             <span className="text-accent">Progetti in</span><br />
@@ -213,13 +227,29 @@ export default function ProjectsSection({ onShowStack }: ProjectsProps) {
                         <svg className="w-7 h-7 text-accent" fill="currentColor" viewBox="0 0 20 20">{p.icon}</svg>
                       </div>
                     </div>
-                    <button onClick={() => handleOpenUrl(p)} className={`absolute top-2 left-2 ${btnOverlay}`}>
-                      <LinkIcon />
-                    </button>
-                    {p.extraButtons?.map((btn, i) => (
-                      <button key={i} onClick={btn.action} className={`absolute top-2 ${btn.position} ${btnOverlay}`}>
-                        {btn.label}
+                    {p.comingSoon ? (
+                      <button
+                        className={`absolute top-2 left-2 ${btnOverlay} cursor-default`}
+                        onMouseEnter={showComingSoonTooltip}
+                        onMouseLeave={() => setComingSoonTooltip(null)}
+                      >
+                        <LinkIcon />
                       </button>
+                    ) : (
+                      <button onClick={() => handleOpenUrl(p)} className={`absolute top-2 left-2 ${btnOverlay}`}>
+                        <LinkIcon />
+                      </button>
+                    )}
+                    {p.extraButtons?.map((btn, i) => (
+                      btn.isTag ? (
+                        <div key={i} className={`absolute top-2 ${btn.position} ${btnOverlay} cursor-default pointer-events-none`}>
+                          {btn.label}
+                        </div>
+                      ) : (
+                        <button key={i} onClick={btn.action} className={`absolute top-2 ${btn.position} ${btnOverlay}`}>
+                          {btn.label}
+                        </button>
+                      )
                     ))}
                     {p.stackIds && (
                       <button
@@ -247,34 +277,95 @@ export default function ProjectsSection({ onShowStack }: ProjectsProps) {
           </div>
         </div>
 
-        {/* Mobile: scroll orizzontale con swipe */}
-        <div className="md:hidden w-full overflow-x-auto snap-x snap-mandatory pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
-          <div className="flex gap-4 px-4" style={{ width: 'max-content' }}>
-            {PROJECTS.map((p) => (
-              <div key={p.name} className="group bg-white border border-gray-200 rounded-lg shadow-sm w-[280px] flex-shrink-0 snap-center">
-                <div className={`relative h-32 bg-gradient-to-br ${p.gradient} overflow-hidden rounded-t-lg`}>
-                  <div className={`absolute inset-0 bg-gradient-to-br ${p.overlay}`}></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-12 h-12 bg-white/80 rounded-lg flex items-center justify-center shadow-lg">
-                      <svg className="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 20 20">{p.icon}</svg>
+        {/* Mobile: mini-tile espandibili */}
+        <div className="md:hidden w-full px-4 space-y-2">
+          {PROJECTS.map((p) => {
+            const isOpen = expandedMobile === p.name;
+            return (
+              <div key={p.name} className={`bg-white border rounded-xl overflow-hidden shadow-sm transition-colors duration-200 ${isOpen ? 'border-accent/40' : 'border-gray-200'}`}>
+                <button
+                  onClick={() => setExpandedMobile(isOpen ? null : p.name)}
+                  className="w-full flex items-center gap-3 p-3 text-left"
+                >
+                  <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${p.gradient} flex items-center justify-center flex-shrink-0 shadow-sm`}>
+                    <svg className="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 20 20">{p.icon}</svg>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className={`font-semibold text-sm transition-colors duration-200 ${isOpen ? 'text-accent' : 'text-gray-900'}`}>{p.name}</span>
+                    <div className="flex gap-1 mt-0.5">
+                      {p.tags.slice(0, 2).map(tag => (
+                        <span key={tag} className="px-1.5 py-0.5 bg-gray-100 text-[10px] rounded text-gray-500">{tag}</span>
+                      ))}
+                      {p.comingSoon && (
+                        <span className="px-1.5 py-0.5 bg-accent/10 text-[10px] rounded text-accent font-medium">Soon</span>
+                      )}
                     </div>
                   </div>
-                  <button onClick={() => handleOpenUrl(p)} className={`absolute top-2 left-2 ${btnOverlayMobile}`}>
-                    <LinkIcon />
-                  </button>
-                </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 mb-1 text-base">{p.name}</h3>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">{p.descriptionShort}</p>
-                  <div className="flex flex-wrap gap-1">
-                    {p.tags.map(tag => (
-                      <span key={tag} className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">{tag}</span>
-                    ))}
-                  </div>
-                </div>
+                  <svg
+                    className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25, ease: 'easeInOut' }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-3 pb-3 pt-1 border-t border-gray-100">
+                        <p className="text-sm text-gray-600 mb-3 leading-relaxed">{p.descriptionShort}</p>
+                        <div className="flex flex-wrap gap-1 mb-3">
+                          {p.tags.map(tag => (
+                            <span key={tag} className="px-2 py-0.5 bg-gray-100 text-xs rounded text-gray-700">{tag}</span>
+                          ))}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {p.comingSoon ? (
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-xs rounded-lg text-gray-400">
+                              <LinkIcon />
+                              <span className="text-gray-500">Prossimamente</span>
+                            </span>
+                          ) : (
+                            <button
+                              onClick={() => handleOpenUrl(p)}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent text-white text-xs rounded-lg active:scale-95 transition-transform"
+                            >
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                              </svg>
+                              Visita
+                            </button>
+                          )}
+                          {p.extraButtons?.some(btn => btn.isTag) && (
+                            <span className="inline-flex items-center px-2.5 py-1.5 bg-green-50 text-xs rounded-lg text-green-700 font-medium">
+                              Progetto a pagamento
+                            </span>
+                          )}
+                          {p.stackIds && (
+                            <button
+                              onClick={() => onShowStack(p.stackIds!)}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-900/80 text-white text-xs rounded-lg active:scale-95 transition-transform ml-auto"
+                            >
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                              </svg>
+                              Stack
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </AnimatedSection>
 
@@ -299,6 +390,15 @@ export default function ProjectsSection({ onShowStack }: ProjectsProps) {
           style={{ left: devTooltip.x, top: devTooltip.y, transform: 'translateX(-50%)' }}
         >
           Cliccami!
+          <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-accent"></span>
+        </div>
+      )}
+      {comingSoonTooltip && (
+        <div
+          className="fixed z-[9999] px-2 py-1 bg-accent text-white text-[10px] rounded-md shadow-lg pointer-events-none animate-fade-in"
+          style={{ left: comingSoonTooltip.x, top: comingSoonTooltip.y, transform: 'translateX(-50%)' }}
+        >
+          Prossimamente
           <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-accent"></span>
         </div>
       )}

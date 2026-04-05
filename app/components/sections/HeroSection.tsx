@@ -3,9 +3,9 @@ import { useState, useEffect, useCallback } from 'react';
 import HeroShape from '../ui/HeroShape';
 
 const skillsData = {
-  skill1: ['Sviluppo web', 'Frontend', 'Backend', 'Full-stack development', 'API REST'],
-  skill2: ['design minimalista', 'interfacce intuitive', 'UX/UI design', 'design responsive', 'prototipazione'],
-  skill3: ['creatività', 'innovazione', 'problem solving', 'pensiero laterale', 'soluzioni eleganti']
+  skill1: ['Full-stack dev', 'Frontend', 'Backend', 'HMI & Web', 'API & sistemi'],
+  skill2: ['design minimalista', 'interfacce precise', 'UX/UI design', 'architetture pulite', 'code-first thinking'],
+  skill3: ['problem solving', 'debug aggressivo', 'soluzioni eleganti', 'zero bug tolerance', 'pensiero laterale']
 } as const;
 
 type SkillKey = keyof typeof skillsData;
@@ -149,7 +149,7 @@ export default function HeroSection() {
                 });
               }}
             >
-              <span className="hover-word">Benvenuto</span> <span className="hover-word">nel</span> <span className="hover-word">mio</span> <span className="hover-word">portfolio.</span> <span className="hover-word">Sono</span> <span className="hover-word">un</span> <span className="hover-word">appassionato</span> <span className="hover-word">sviluppatore</span> <span className="hover-word">web</span> <span className="hover-word">specializzato</span> <span className="hover-word">nella</span> <span className="hover-word">creazione</span> <span className="hover-word">di</span> <span className="hover-word">esperienze</span> <span className="hover-word">digitali</span> <span className="hover-word">minimaliste</span> <span className="hover-word">e</span> <span className="hover-word">funzionali.</span> <span className="hover-word">Il</span> <span className="hover-word">mio</span> <span className="hover-word">approccio</span> <span className="hover-word">si</span> <span className="hover-word">basa</span> <span className="hover-word">sulla</span> <span className="hover-word">semplicità</span> <span className="hover-word">e</span> <span className="hover-word">sull'essenzialità,</span> <span className="hover-word">concentrandomi</span> <span className="hover-word">sui</span> <span className="hover-word">contenuti</span> <span className="hover-word">e</span> <span className="hover-word">sull'esperienza</span> <span className="hover-word">utente.</span>
+              <span className="hover-word">Se</span> <span className="hover-word">posso</span> <span className="hover-word">scriptarlo,</span> <span className="hover-word">lo</span> <span className="hover-word">scrivo.</span> <span className="hover-word">Se</span> <span className="hover-word">è</span> <span className="hover-word">moderno,</span> <span className="hover-word">lo</span> <span className="hover-word">costruisco.</span> <span className="hover-word">Sviluppatore</span> <span className="hover-word">full-stack</span> <span className="hover-word">tra</span> <span className="hover-word">il</span> <span className="hover-word">web</span> <span className="hover-word">e</span> <span className="hover-word">i</span> <span className="hover-word">sistemi</span> <span className="hover-word">industriali</span> <span className="hover-word">—</span> <span className="hover-word">ogni</span> <span className="hover-word">progetto</span> <span className="hover-word">è</span> <span className="hover-word">un</span> <span className="hover-word">sistema</span> <span className="hover-word">da</span> <span className="hover-word">capire,</span> <span className="hover-word">ottimizzare</span> <span className="hover-word">e</span> <span className="hover-word">rendere</span> <span className="hover-word">bello.</span> <span className="hover-word">Non</span> <span className="hover-word">creo</span> <span className="hover-word">bug:</span> <span className="hover-word">li</span> <span className="hover-word">trovo</span> <span className="hover-word">prima</span> <span className="hover-word">che</span> <span className="hover-word">diventino</span> <span className="hover-word">feature.</span>
             </p>
           </div>
           <AnimatedHeroShape />
