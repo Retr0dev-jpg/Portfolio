@@ -536,7 +536,9 @@ export default function WorksSection() {
                   </svg>
                   Scarica CV
                 </div>
-                <p className="text-xs text-gray-500 text-center">05/09/2025 · PDF</p>
+                <p className="text-xs text-gray-500 text-center">
+                  {process.env.NEXT_PUBLIC_CV_UPDATED_AT} · PDF
+                </p>
               </div>
             </div>
         </div>
