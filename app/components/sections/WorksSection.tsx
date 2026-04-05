@@ -20,6 +20,7 @@ export default function WorksSection() {
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number } | null>(null);
   const [hoveredNode, setHoveredNode] = useState<NodeId | null>(null);
   const [pinnedNode, setPinnedNode] = useState<NodeId | null>(null);
+  const [expandedCard, setExpandedCard] = useState<string | null>('node1');
   const [dragHasMoved, setDragHasMoved] = useState(false);
 
   const isNodeActive = useCallback(
@@ -112,132 +113,176 @@ export default function WorksSection() {
 
   return (
     <AnimatedSection id="works" title="Works" variant="right" showTitle={false}>
-      {/* Mobile: timeline verticale */}
-      <div className="md:hidden w-full">
-          <div className="flex justify-center mb-10">
-            <button
-              onClick={() => window.open('/CV/CV_Marco_Simone_Cannizzaro.pdf', '_blank', 'noopener,noreferrer')}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white rounded-2xl shadow-lg border border-gray-200 text-accent font-semibold text-sm active:scale-95 transition-all"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v12m0 0l-4-4m4 4l4-4m-9 9h10" />
-              </svg>
-              Scarica CV
-              <span className="text-xs text-gray-500 font-normal">PDF</span>
-            </button>
+      {/* Mobile: accordion cards */}
+      <div className="md:hidden w-full space-y-3">
+
+        {/* Card 01 - Metapack */}
+        <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+          <button
+            className="w-full p-4 text-left flex items-start gap-3 relative overflow-hidden"
+            onClick={() => setExpandedCard(expandedCard === 'node1' ? null : 'node1')}
+          >
+            <span className="absolute right-10 top-1/2 -translate-y-1/2 text-8xl font-black text-purple-500 opacity-[0.06] select-none leading-none pointer-events-none">04</span>
+            <div className="w-2.5 h-2.5 rounded-full bg-purple-500 mt-1.5 shrink-0 ring-4 ring-purple-100" />
+            <div className="flex-1 min-w-0">
+              <span className="text-xs text-gray-400 font-mono">Ott 2025 – oggi</span>
+              <h3 className="font-bold text-gray-900 text-base leading-tight">Software Specialist</h3>
+              <p className="text-sm text-purple-500 font-medium mt-0.5">Metapack Engineering Srl</p>
+            </div>
+            <svg className={`w-4 h-4 text-gray-300 mt-1 shrink-0 transition-transform duration-200 ${expandedCard === 'node1' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${expandedCard === 'node1' ? 'max-h-96' : 'max-h-0'}`}>
+            <div className="px-4 pb-4 border-t border-purple-50">
+              <p className="text-sm text-gray-600 leading-relaxed mt-3 mb-3">
+                Sviluppo di applicazioni HMI in ambiente .NET (C#/VB.NET) per il monitoraggio e il controllo di processi industriali.
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                <span className="px-2 py-1 bg-purple-50 text-purple-600 text-xs rounded-md font-medium">Automazione</span>
+                <span className="px-2 py-1 bg-purple-50 text-purple-600 text-xs rounded-md font-medium">Serializzazione</span>
+                <span className="px-2 py-1 bg-purple-50 text-purple-600 text-xs rounded-md font-medium">VB.NET</span>
+              </div>
+            </div>
           </div>
-
-          <div className="relative max-w-lg mx-auto px-2 pl-6 border-l-2 border-accent/30 space-y-10">
-            {/* Nodo 1 - Metapack */}
-            <div className="relative">
-              <div className="absolute -left-[21px] top-1 w-4 h-4 rounded-full bg-accent border-4 border-white shadow-md" />
-              <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                <div className="bg-gradient-to-r from-purple-500 to-purple-600 px-4 py-3">
-                  <h3 className="text-sm font-bold text-white break-words">Metapack Engineering Srl</h3>
-                  <p className="text-xs text-purple-100">Ottobre 2025 - Presente</p>
-                </div>
-                <div className="p-4">
-                  <p className="text-xs font-semibold text-accent uppercase tracking-wider mb-2">Software Specialist</p>
-                  <p className="text-sm text-gray-700 leading-relaxed mb-3">
-                    Sviluppo di applicazioni HMI in ambiente .NET (C#/VB.NET) per il monitoraggio e il controllo di processi industriali.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded font-medium">Automazione</span>
-                    <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded font-medium">Serializzazione</span>
-                    <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded font-medium">VB.NET</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Nodo 2 - Freelancer */}
-            <div className="relative">
-              <div className="absolute -left-[21px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-white shadow-md" />
-              <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-3">
-                  <h3 className="text-sm font-bold text-white break-words">Freelancer</h3>
-                  <p className="text-xs text-blue-100">Giugno 2025 - Ottobre 2025</p>
-                </div>
-                <div className="p-4">
-                  <p className="text-xs font-semibold text-accent uppercase tracking-wider mb-2">Freelance Developer</p>
-                  <p className="text-sm text-gray-700 leading-relaxed mb-3">
-                    Progettazione e realizzazione di prodotti digitali su misura: dal discovery al deploy, con focus su scalabilità, manutenibilità e valore per il business.
-                  </p>
-                  <div className="mb-3">
-                    <p className="text-xs font-semibold text-gray-600 mb-1.5">Progetti realizzati:</p>
-                    <div className="space-y-0.5 text-sm text-gray-600 break-all">
-                      <div className="flex items-center gap-1">
-                        <span className="text-gray-400">•</span>
-                        <a href="https://new.molisebasket.net" target="_blank" rel="noopener noreferrer" className="text-blue-600">new.molisebasket.net</a>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-gray-400">•</span>
-                        <a href="https://www.passoetiro.com" target="_blank" rel="noopener noreferrer" className="text-blue-600">www.passoetiro.com</a>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-gray-400">•</span>
-                        <a href="https://retr0hub.dev" target="_blank" rel="noopener noreferrer" className="text-blue-600">retr0hub.dev</a>
-                        <span className="text-gray-500 text-xs">(In sviluppo)</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-gray-400">•</span>
-                        <a href="https://lab.retr0hub.dev" target="_blank" rel="noopener noreferrer" className="text-blue-600">lab.retr0hub.dev</a>
-                        <span className="text-gray-500 text-xs">(Prossimamente)</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">React</span>
-                    <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">Next.js</span>
-                    <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">Web Design</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Nodo 3 - Diploma */}
-            <div className="relative">
-              <div className="absolute -left-[21px] top-1 w-4 h-4 rounded-full bg-orange-500 border-4 border-white shadow-md" />
-              <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-3">
-                  <h3 className="text-sm font-bold text-white break-words">Diploma</h3>
-                  <p className="text-xs text-orange-100">2020 - 2025 | IIS Galilei Sani, Latina</p>
-                </div>
-                <div className="p-4">
-                  <p className="text-sm text-gray-700 leading-relaxed mb-3">
-                    Indirizzo Informatica e Telecomunicazioni (sviluppo base di software, siti web, reti e sistemi informatici).
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded font-medium">Sviluppo Software</span>
-                    <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded font-medium">Siti Web</span>
-                    <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded font-medium">Reti</span>
-                    <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded font-medium">Sistemi IT</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Nodo 4 - PCTO MTECH */}
-            <div className="relative">
-              <div className="absolute -left-[21px] top-1 w-4 h-4 rounded-full bg-green-500 border-4 border-white shadow-md" />
-              <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                <div className="bg-gradient-to-r from-green-500 to-green-600 px-4 py-3">
-                  <h3 className="text-sm font-bold text-white break-words">Apprendista Tecnico di Laboratorio</h3>
-                  <p className="text-xs text-green-100">Giugno 2024 - Agosto 2024 | MTECH SOLUTIONS Srl</p>
-                </div>
-                <div className="p-4">
-                  <p className="text-sm text-gray-700 leading-relaxed mb-3">
-                    Setup tecnico di workstation e periferiche, diagnostica sistemistica e supporto utente in ambito IT.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-medium">Configurazione HW</span>
-                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-medium">Analisi Guasti</span>
-                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-medium">Manutenzione</span>
-                  </div>
-                </div>
-              </div>
-            </div>
         </div>
+
+        {/* Card 02 - Freelancer */}
+        <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+          <button
+            className="w-full p-4 text-left flex items-start gap-3 relative overflow-hidden"
+            onClick={() => setExpandedCard(expandedCard === 'node2' ? null : 'node2')}
+          >
+            <span className="absolute right-10 top-1/2 -translate-y-1/2 text-8xl font-black text-blue-500 opacity-[0.06] select-none leading-none pointer-events-none">03</span>
+            <div className="w-2.5 h-2.5 rounded-full bg-blue-500 mt-1.5 shrink-0 ring-4 ring-blue-100" />
+            <div className="flex-1 min-w-0">
+              <span className="text-xs text-gray-400 font-mono">Giu – Ott 2025</span>
+              <h3 className="font-bold text-gray-900 text-base leading-tight">Freelance Developer</h3>
+              <p className="text-sm text-blue-500 font-medium mt-0.5">Freelancer</p>
+            </div>
+            <svg className={`w-4 h-4 text-gray-300 mt-1 shrink-0 transition-transform duration-200 ${expandedCard === 'node2' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${expandedCard === 'node2' ? 'max-h-[500px]' : 'max-h-0'}`}>
+            <div className="px-4 pb-4 border-t border-blue-50">
+              <p className="text-sm text-gray-600 leading-relaxed mt-3 mb-3">
+                Progettazione e realizzazione di prodotti digitali su misura: dal discovery al deploy, con focus su scalabilità, manutenibilità e valore per il business.
+              </p>
+              <div className="mb-3">
+                <p className="text-xs font-semibold text-gray-500 mb-1.5">Progetti realizzati:</p>
+                <div className="space-y-1 text-sm text-gray-600">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-blue-300 shrink-0" />
+                    <a href="https://new.molisebasket.net" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline break-all">new.molisebasket.net</a>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-blue-300 shrink-0" />
+                    <a href="https://www.passoetiro.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline break-all">www.passoetiro.com</a>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-blue-300 shrink-0" />
+                    <a href="https://retr0hub.dev" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline break-all">retr0hub.dev</a>
+                    <span className="text-gray-400 text-xs shrink-0">(In sviluppo)</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-blue-300 shrink-0" />
+                    <a href="https://lab.retr0hub.dev" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline break-all">lab.retr0hub.dev</a>
+                    <span className="text-gray-400 text-xs shrink-0">(Prossimamente)</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                <span className="px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded-md font-medium">React</span>
+                <span className="px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded-md font-medium">Next.js</span>
+                <span className="px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded-md font-medium">Web Design</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 03 - Diploma */}
+        <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+          <button
+            className="w-full p-4 text-left flex items-start gap-3 relative overflow-hidden"
+            onClick={() => setExpandedCard(expandedCard === 'node3' ? null : 'node3')}
+          >
+            <span className="absolute right-10 top-1/2 -translate-y-1/2 text-8xl font-black text-orange-500 opacity-[0.06] select-none leading-none pointer-events-none">02</span>
+            <div className="w-2.5 h-2.5 rounded-full bg-orange-500 mt-1.5 shrink-0 ring-4 ring-orange-100" />
+            <div className="flex-1 min-w-0">
+              <span className="text-xs text-gray-400 font-mono">2020 – 2025</span>
+              <h3 className="font-bold text-gray-900 text-base leading-tight">Diploma IT</h3>
+              <p className="text-sm text-orange-500 font-medium mt-0.5">IIS Galilei Sani, Latina</p>
+            </div>
+            <svg className={`w-4 h-4 text-gray-300 mt-1 shrink-0 transition-transform duration-200 ${expandedCard === 'node3' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${expandedCard === 'node3' ? 'max-h-64' : 'max-h-0'}`}>
+            <div className="px-4 pb-4 border-t border-orange-50">
+              <p className="text-sm text-gray-600 leading-relaxed mt-3 mb-3">
+                Indirizzo Informatica e Telecomunicazioni (sviluppo base di software, siti web, reti e sistemi informatici).
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                <span className="px-2 py-1 bg-orange-50 text-orange-600 text-xs rounded-md font-medium">Sviluppo Software</span>
+                <span className="px-2 py-1 bg-orange-50 text-orange-600 text-xs rounded-md font-medium">Siti Web</span>
+                <span className="px-2 py-1 bg-orange-50 text-orange-600 text-xs rounded-md font-medium">Reti</span>
+                <span className="px-2 py-1 bg-orange-50 text-orange-600 text-xs rounded-md font-medium">Sistemi IT</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 04 - PCTO MTECH */}
+        <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+          <button
+            className="w-full p-4 text-left flex items-start gap-3 relative overflow-hidden"
+            onClick={() => setExpandedCard(expandedCard === 'node4' ? null : 'node4')}
+          >
+            <span className="absolute right-10 top-1/2 -translate-y-1/2 text-8xl font-black text-green-500 opacity-[0.06] select-none leading-none pointer-events-none">01</span>
+            <div className="w-2.5 h-2.5 rounded-full bg-green-500 mt-1.5 shrink-0 ring-4 ring-green-100" />
+            <div className="flex-1 min-w-0">
+              <span className="text-xs text-gray-400 font-mono">Giu – Ago 2024</span>
+              <h3 className="font-bold text-gray-900 text-base leading-tight">Tecnico di Lab. (PCTO)</h3>
+              <p className="text-sm text-green-600 font-medium mt-0.5">MTECH SOLUTIONS Srl</p>
+            </div>
+            <svg className={`w-4 h-4 text-gray-300 mt-1 shrink-0 transition-transform duration-200 ${expandedCard === 'node4' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${expandedCard === 'node4' ? 'max-h-64' : 'max-h-0'}`}>
+            <div className="px-4 pb-4 border-t border-green-50">
+              <p className="text-sm text-gray-600 leading-relaxed mt-3 mb-3">
+                Setup tecnico di workstation e periferiche, diagnostica sistemistica e supporto utente in ambito IT.
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                <span className="px-2 py-1 bg-green-50 text-green-600 text-xs rounded-md font-medium">Configurazione HW</span>
+                <span className="px-2 py-1 bg-green-50 text-green-600 text-xs rounded-md font-medium">Analisi Guasti</span>
+                <span className="px-2 py-1 bg-green-50 text-green-600 text-xs rounded-md font-medium">Manutenzione</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA Scarica CV */}
+        <button
+          onClick={() => window.open('/CV/CV_Marco_Simone_Cannizzaro.pdf', '_blank', 'noopener,noreferrer')}
+          className="w-full mt-1 rounded-2xl bg-gradient-to-r from-accent to-violet-400 p-4 flex items-center gap-3 shadow-lg shadow-accent/20 active:scale-[0.98] transition-transform"
+        >
+          <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v12m0 0l-4-4m4 4l4-4m-9 9h10" />
+            </svg>
+          </div>
+          <div className="text-left">
+            <p className="font-bold text-white text-sm">Scarica CV</p>
+            <p className="text-xs text-white/70">{process.env.NEXT_PUBLIC_CV_UPDATED_AT} · PDF</p>
+          </div>
+          <svg className="w-4 h-4 text-white/50 ml-auto shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+
       </div>
 
       {/* Desktop: nodi draggabili */}
