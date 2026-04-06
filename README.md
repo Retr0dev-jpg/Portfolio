@@ -4,12 +4,6 @@ Un portfolio web moderno e minimalista. Progettato per offrire un'esperienza ute
 
 ---
 
-## ⚠️ Note & Limitazioni
-
-> **🚨 Versione Mobile**: La versione responsive per dispositivi mobili è ancora instabile. Il portfolio è attualmente ottimizzato per desktop e tablet in orientamento landscape.
-
----
-
 ## 📁 Struttura del Progetto
 
 ```
