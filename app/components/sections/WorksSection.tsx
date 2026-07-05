@@ -88,7 +88,7 @@ export default function WorksSection() {
         window.dispatchEvent(new CustomEvent('node-drag-end'));
         if (!dragHasMoved) {
           if (draggingNode === 'nodeCV') {
-            window.open('/CV/CV_Marco_Simone_Cannizzaro.pdf', '_blank');
+            window.open('/CV/CV%20Cannizzaro%20Marco%20Simone.pdf', '_blank');
           } else {
             setPinnedNode((prev) => (prev === draggingNode ? null : draggingNode));
           }
@@ -125,7 +125,7 @@ export default function WorksSection() {
             <span className="absolute right-10 top-1/2 -translate-y-1/2 text-8xl font-black text-purple-500 opacity-[0.06] select-none leading-none pointer-events-none">04</span>
             <div className="w-2.5 h-2.5 rounded-full bg-purple-500 mt-1.5 shrink-0 ring-4 ring-purple-100" />
             <div className="flex-1 min-w-0">
-              <span className="text-xs text-gray-400 font-mono">Ott 2025 – oggi</span>
+              <span className="text-xs text-gray-400 font-mono">Ott 2025 – Giu 2026</span>
               <h3 className="font-bold text-gray-900 text-base leading-tight">Software Specialist</h3>
               <p className="text-sm text-purple-500 font-medium mt-0.5">Metapack Engineering Srl</p>
             </div>
@@ -183,7 +183,10 @@ export default function WorksSection() {
                   <div className="flex items-center gap-1.5">
                     <span className="w-1 h-1 rounded-full bg-blue-300 shrink-0" />
                     <a href="https://retr0hub.dev" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline break-all">retr0hub.dev</a>
-                    <span className="text-gray-400 text-xs shrink-0">(In sviluppo)</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-blue-300 shrink-0" />
+                    <a href="https://memolee.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline break-all">memolee.vercel.app</a>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <span className="w-1 h-1 rounded-full bg-blue-300 shrink-0" />
@@ -267,7 +270,7 @@ export default function WorksSection() {
 
         {/* CTA Scarica CV */}
         <button
-          onClick={() => window.open('/CV/CV_Marco_Simone_Cannizzaro.pdf', '_blank', 'noopener,noreferrer')}
+          onClick={() => window.open('/CV/CV%20Cannizzaro%20Marco%20Simone.pdf', '_blank', 'noopener,noreferrer')}
           className="w-full mt-1 rounded-2xl bg-gradient-to-r from-accent to-violet-400 p-4 flex items-center gap-3 shadow-lg shadow-accent/20 active:scale-[0.98] transition-transform"
         >
           <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
@@ -395,7 +398,7 @@ export default function WorksSection() {
               <div className="relative w-40 h-40 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-200 group-hover:border-accent group-hover:shadow-2xl transition-all duration-500" data-node-draggable="true">
                 <div className="absolute inset-2 rounded-full bg-gradient-to-br from-purple-50 to-white"></div>
                 <div className="relative text-center z-10 px-4">
-                  <div className="text-xs font-semibold text-accent uppercase tracking-wider mb-1">Ott 2025 - Presente</div>
+                  <div className="text-xs font-semibold text-accent uppercase tracking-wider mb-1">Ott 2025 - Giu 2026</div>
                   <div className="text-sm font-bold text-gray-800 leading-tight">Software Specialist</div>
                 </div>
               </div>
@@ -405,7 +408,7 @@ export default function WorksSection() {
               >
                 <div className="bg-gradient-to-r from-purple-500 to-purple-600 px-6 py-3">
                   <h3 className="text-lg font-bold text-white">Metapack Engineering Srl</h3>
-                  <p className="text-xs text-purple-100">Ottobre 2025 - Presente</p>
+                  <p className="text-xs text-purple-100">Ottobre 2025 - Giugno 2026</p>
                 </div>
                 <div className="p-6">
                   <p className="text-sm text-gray-700 leading-relaxed mb-4">
@@ -465,7 +468,10 @@ export default function WorksSection() {
                       <div className="flex items-center gap-1 w-fit text-sm">
                         <span className="text-gray-400">•</span>
                         <a href="https://retr0hub.dev" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">retr0hub.dev</a>
-                        <span className="text-gray-500">(In sviluppo)</span>
+                      </div>
+                      <div className="flex items-center gap-1 w-fit text-sm">
+                        <span className="text-gray-400">•</span>
+                        <a href="https://memolee.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">memolee.vercel.app</a>
                       </div>
                       <div className="flex items-center gap-1 w-fit text-sm">
                         <span className="text-gray-400">•</span>

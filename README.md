@@ -42,7 +42,7 @@ Portfolio/
 │
 ├── public/
 │   ├── CV/
-│   │   └── CV_Marco_Simone_Cannizzaro.pdf
+│   │   └── CV Cannizzaro Marco Simone.pdf
 │   └── hostinger-icon.svg
 │
 ├── .env.local                       # Variabili d'ambiente (non in git)

@@ -44,6 +44,17 @@ const PROJECTS: ProjectData[] = [
     stackIds: ['frontend', 'backend', 'hosting', 'databases', 'git'],
   },
   {
+    name: 'Memolee',
+    description: 'Portfolio musicale per un giovane artista turco emergente: showcase dei brani, biografia e presenza online curata.',
+    descriptionShort: 'Portfolio musicale per un giovane artista emergente: brani, bio e presenza online.',
+    tags: ['React', 'Vercel', 'Portfolio'],
+    gradient: 'from-pink-100 to-pink-200',
+    overlay: 'from-pink-400/20 to-rose-400/20',
+    icon: <path fillRule="evenodd" d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z" clipRule="evenodd" />,
+    url: 'https://memolee.vercel.app/',
+    stackIds: ['frontend', 'hosting', 'git'],
+  },
+  {
     name: 'Portfolio',
     description: 'Nuovo ecosistema personale: design system proprietario, esperimenti UI e spazio community/lab in continua evoluzione.',
     descriptionShort: 'Ecosistema personale: design system proprietario, esperimenti UI e community/lab.',
@@ -85,17 +96,6 @@ const PROJECTS: ProjectData[] = [
       position: 'left-12',
       isTag: true,
     }],
-  },
-  {
-    name: 'Deskit',
-    description: 'Suite per gestire menu, palinsesti e promo nei punti vendita con sincronizzazione cloud e player offline.',
-    descriptionShort: 'Suite per gestire menu, palinsesti e promo con sync cloud.',
-    tags: ['React', 'PHP', 'Rest API'],
-    gradient: 'from-green-100 to-green-200',
-    overlay: 'from-green-400/20 to-emerald-400/20',
-    icon: <><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fillRule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 102 0V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" /></>,
-    comingSoon: true,
-    stackIds: ['frontend', 'backend', 'hosting', 'php', 'git'],
   },
 ];
 
