@@ -136,7 +136,7 @@ export default function WorksSection() {
           <div className={`overflow-hidden transition-all duration-300 ease-in-out ${expandedCard === 'node1' ? 'max-h-96' : 'max-h-0'}`}>
             <div className="px-4 pb-4 border-t border-purple-50">
               <p className="text-sm text-gray-600 leading-relaxed mt-3 mb-3">
-                Sviluppo di applicazioni HMI in ambiente .NET (C#/VB.NET) per il monitoraggio e il controllo di processi industriali.
+                Sviluppo di applicazioni HMI in ambiente .NET (C#/VB.NET), con AI a supporto dello sviluppo.
               </p>
               <div className="flex flex-wrap gap-1.5">
                 <span className="px-2 py-1 bg-purple-50 text-purple-600 text-xs rounded-md font-medium">Automazione</span>
@@ -412,7 +412,7 @@ export default function WorksSection() {
                 </div>
                 <div className="p-6">
                   <p className="text-sm text-gray-700 leading-relaxed mb-4">
-                    Sviluppo di applicazioni HMI in ambiente .NET (C#/VB.NET) per il monitoraggio e il controllo di processi industriali.
+                    Sviluppo di applicazioni HMI in ambiente .NET (C#/VB.NET), con AI a supporto dello sviluppo.
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded font-medium">Automazione</span>

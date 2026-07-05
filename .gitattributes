@@ -1,0 +1,21 @@
+# Enforce LF line endings for all text files (checkout and commit)
+* text=auto eol=lf
+
+# Binary files: never modify line endings
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.svg text eol=lf
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.eot binary
+*.mp4 binary
+*.webm binary
+*.mov binary
+*.zip binary
