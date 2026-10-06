@@ -12,7 +12,7 @@ next-env.d.ts
 /out/
 
 # Environment variables
-!.env.example
 .env*.local
 .env.*
 .env
+!.env.example

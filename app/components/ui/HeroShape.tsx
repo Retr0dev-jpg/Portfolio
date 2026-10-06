@@ -1,235 +1,219 @@
 'use client';
-import { motion, AnimatePresence } from 'framer-motion';
-import React, { useState, useEffect, useRef } from 'react';
 
-interface HeroShapeProps {
-  shape: 'circle' | 'triangle';
-  className?: string;
+import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import { normalizeAngle } from '@/app/lib/math';
+
+type Phase = 'atom' | 'explosion' | 'blackhole';
+type Point = { x: number; y: number };
+
+const CENTER = 200;
+const ORBIT_COLOR = '#4B5563';
+/** Caps the per-frame step so a background tab doesn't make electrons jump on resume. */
+const MAX_FRAME_DELTA = 0.016;
+
+const NUCLEUS = [
+  { x: 192, y: 192, color: '#e53e3e' },
+  { x: 212, y: 185, color: '#e53e3e' },
+  { x: 200, y: 216, color: '#3b82f6' },
+  { x: 224, y: 208, color: '#3b82f6' },
+  { x: 208, y: 228, color: '#e53e3e' },
+  { x: 176, y: 212, color: '#3b82f6' },
+] as const;
+const NUCLEON_RADIUS = 16;
+
+const ORBITS = [
+  { rx: 150, ry: 50, speed: 0.12, electronSpeed: 0.15, angle: 0, electronAngle: 0 },
+  { rx: 200, ry: 70, speed: 0.12, electronSpeed: 0.12, angle: Math.PI / 4, electronAngle: (Math.PI * 2) / 3 },
+  { rx: 250, ry: 90, speed: 0.12, electronSpeed: 0.18, angle: Math.PI / 2, electronAngle: (Math.PI * 4) / 3 },
+] as const;
+const ELECTRON_RADIUS = 10;
+
+const TIMING = {
+  explosion: 1200,
+  swallowStart: 300,
+  swallowStep: 200,
+  settle: 500,
+} as const;
+
+const toDegrees = (radians: number) => (radians * 180) / Math.PI;
+const orbitTransform = (angle: number) => `rotate(${toDegrees(angle)} ${CENTER} ${CENTER})`;
+
+function electronPosition(orbit: (typeof ORBITS)[number], orbitAngle: number, electronAngle: number): Point {
+  const x = orbit.rx * Math.cos(electronAngle);
+  const y = orbit.ry * Math.sin(electronAngle);
+  return {
+    x: CENTER + x * Math.cos(orbitAngle) - y * Math.sin(orbitAngle),
+    y: CENTER + x * Math.sin(orbitAngle) + y * Math.cos(orbitAngle),
+  };
 }
 
-// Genera i punti di un cerchio
-function getCirclePoints(cx: number, cy: number, r: number, n: number) {
-  return Array.from({ length: n }, (_, i) => {
-    const theta = (2 * Math.PI * i) / n;
+function randomExplosionTargets(): (Point & { delay: number })[] {
+  return NUCLEUS.map((nucleon) => {
+    const angle = Math.atan2(nucleon.y - CENTER, nucleon.x - CENTER);
+    const distance = 150 + Math.random() * 50;
     return {
-      x: cx + r * Math.cos(theta),
-      y: cy + r * Math.sin(theta),
+      x: CENTER + Math.cos(angle) * distance,
+      y: CENTER + Math.sin(angle) * distance,
+      delay: 0.1 + Math.random() * 0.2,
     };
   });
 }
 
-// Genera i punti di un triangolo equilatero centrato (mantenuto per compatibilità)
-function getTrianglePoints(cx: number, cy: number, r: number, n: number) {
-  // Vertici del triangolo
-  const verts = [
-    { x: cx, y: cy - r }, // top
-    { x: cx + r * Math.sin(Math.PI / 3), y: cy + r * Math.cos(Math.PI / 3) }, // bottom right
-    { x: cx - r * Math.sin(Math.PI / 3), y: cy + r * Math.cos(Math.PI / 3) }, // bottom left
-  ];
-  // Suddividi i lati in modo uniforme
-  const points = [];
-  for (let side = 0; side < 3; side++) {
-    const start = verts[side];
-    const end = verts[(side + 1) % 3];
-    for (let i = 0; i < n / 3; i++) {
-      const t = i / (n / 3);
-      points.push({
-        x: start.x + (end.x - start.x) * t,
-        y: start.y + (end.y - start.y) * t,
-      });
-    }
-  }
-  return points;
+function Nucleus({ onClick }: { onClick: () => void }) {
+  return (
+    <>
+      <circle cx={CENTER} cy={CENTER} r="50" fill="transparent" onClick={onClick} />
+      {NUCLEUS.map((nucleon, i) => (
+        <motion.circle
+          key={i}
+          cx={nucleon.x}
+          cy={nucleon.y}
+          r={NUCLEON_RADIUS}
+          fill={nucleon.color}
+          filter="url(#atomGlow)"
+          onClick={onClick}
+          style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{
+            opacity: 1,
+            scale: 1,
+            x: [0, Math.sin(i) * 8, -Math.cos(i) * 5, Math.cos(i * 2) * 7, 0],
+            y: [0, Math.cos(i) * 6, Math.sin(i * 2) * 8, -Math.sin(i) * 5, 0],
+          }}
+          transition={{
+            opacity: { duration: 0.6, delay: 0.6 + i * 0.1 },
+            scale: { duration: 0.6, delay: 0.6 + i * 0.1, ease: 'backOut' },
+            x: { duration: 3 + (i % 3), repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut', delay: i * 0.2 },
+            y: { duration: 4 + (i % 2), repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut', delay: i * 0.2 },
+          }}
+        />
+      ))}
+    </>
+  );
 }
 
-// Interpola tra i punti (mantenuto per compatibilità)
-function interpolatePoints(circle: {x:number,y:number}[], triangle: {x:number,y:number}[], t: number) {
-  return circle.map((c, i) => ({
-    x: c.x + (triangle[i].x - c.x) * t,
-    y: c.y + (triangle[i].y - c.y) * t,
-  }));
+interface Explosion {
+  targets: ReturnType<typeof randomExplosionTargets>;
+  orbitAngles: number[];
 }
 
-// Genera la stringa path SVG da una lista di punti
-function pointsToPath(points: {x:number,y:number}[]) {
-  return points.reduce((acc, p, i) =>
-    acc + (i === 0 ? `M ${p.x},${p.y}` : ` L ${p.x},${p.y}`),
-    '') + ' Z';
-}
+export default function HeroShape({ className = '' }: { className?: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const ellipseRefs = useRef<(SVGEllipseElement | null)[]>([]);
+  const electronRefs = useRef<(SVGCircleElement | null)[]>([]);
+  const angles = useRef({
+    orbit: ORBITS.map((o) => o.angle),
+    electron: ORBITS.map((o) => o.electronAngle),
+  });
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-// Configurazione delle orbite atomiche
-const atomConfig = {
-  nucleus: [
-    { x: 192, y: 192, r: 16, color: "#e53e3e" },
-    { x: 212, y: 185, r: 16, color: "#e53e3e" },
-    { x: 200, y: 216, r: 16, color: "#3b82f6" },
-    { x: 224, y: 208, r: 16, color: "#3b82f6" },
-    { x: 208, y: 228, r: 16, color: "#e53e3e" },
-    { x: 176, y: 212, r: 16, color: "#3b82f6" },
-  ],
-  orbits: [
-    { rx: 150, ry: 50, rotation: 0, electronCount: 1, electronSize: 10, duration: 15 },
-    { rx: 200, ry: 70, rotation: 60, electronCount: 1, electronSize: 10, duration: 20 },
-    { rx: 250, ry: 90, rotation: 120, electronCount: 1, electronSize: 10, duration: 12 },
-  ]
-};
-
-// Calcola direzioni di esplosione casuali per gli atomi
-const explosionDirections = atomConfig.nucleus.map((atom) => {
-  // Calcola l'angolo dal centro (200,200) alla posizione iniziale dell'atomo
-  const dx = atom.x - 200;
-  const dy = atom.y - 200;
-  const angle = Math.atan2(dy, dx);
-  
-  // Distanza di esplosione casuale (150-200 unità)
-  const distance = 150 + Math.random() * 50;
-  
-  // Ritardo casuale per l'esplosione
-  const delay = 0.1 + Math.random() * 0.2;
-  
-  return {
-    x: 200 + Math.cos(angle) * distance,
-    y: 200 + Math.sin(angle) * distance,
-    delay
-  };
-});
-
-export default function HeroShape({ shape, className = '' }: HeroShapeProps) {
-  // Aggiungi uno stato per tracciare se siamo sul client
-  const [isClient, setIsClient] = useState(false);
-  // Stati per il path e i punti
-  const [pathData, setPathData] = useState("");
-  // Stato per le fasi dell'animazione
-  const [animationPhase, setAnimationPhase] = useState<'atom' | 'explosion' | 'blackhole'>('atom');
+  const [phase, setPhase] = useState<Phase>('atom');
   const [isAnimating, setIsAnimating] = useState(false);
-  // Stato per tracciare quante particelle sono state ingoiate
   const [particlesConsumed, setParticlesConsumed] = useState(0);
-  // Stato per la rotazione animata delle orbite - rotazioni iniziali diverse
-  const [orbitAngles, setOrbitAngles] = useState([0, Math.PI/4, Math.PI/2]);
-  // Stato per la posizione angolare dei pallini (elettroni) - posizioni iniziali diverse
-  const [electronAngles, setElectronAngles] = useState([0, Math.PI * 2/3, Math.PI * 4/3]);
-  const requestRef = useRef<number>(0);
-  const cleanupCounterRef = useRef(0);
-  
-  // Funzione per normalizzare gli angoli in modo più robusto
-  const normalizeAngle = (angle: number) => {
-    // Normalizza l'angolo tra 0 e 2π in modo più preciso
-    const normalized = angle % (Math.PI * 2);
-    return normalized < 0 ? normalized + (Math.PI * 2) : normalized;
+  const [explosion, setExplosion] = useState<Explosion | null>(null);
+
+  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+
+  // Orbits are driven imperatively and only while the shape is on screen.
+  useEffect(() => {
+    if (phase !== 'atom' || !containerRef.current) return;
+
+    let frame = 0;
+    let lastTime = 0;
+
+    const tick = (time: number) => {
+      const delta = Math.min((time - lastTime) / 1000, MAX_FRAME_DELTA);
+      lastTime = time;
+      const { orbit, electron } = angles.current;
+
+      ORBITS.forEach((config, i) => {
+        orbit[i] = normalizeAngle(orbit[i] + config.speed * delta);
+        electron[i] = normalizeAngle(electron[i] + config.electronSpeed * delta);
+        const position = electronPosition(config, orbit[i], electron[i]);
+        ellipseRefs.current[i]?.setAttribute('transform', orbitTransform(orbit[i]));
+        electronRefs.current[i]?.setAttribute('cx', String(position.x));
+        electronRefs.current[i]?.setAttribute('cy', String(position.y));
+      });
+
+      frame = requestAnimationFrame(tick);
+    };
+
+    const stop = () => {
+      cancelAnimationFrame(frame);
+      frame = 0;
+    };
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !frame) {
+        lastTime = performance.now();
+        frame = requestAnimationFrame(tick);
+      } else if (!entry.isIntersecting) {
+        stop();
+      }
+    });
+    observer.observe(containerRef.current);
+
+    return () => {
+      observer.disconnect();
+      stop();
+    };
+  }, [phase]);
+
+  const schedule = (fn: () => void, ms: number) => {
+    timers.current.push(setTimeout(fn, ms));
   };
 
-  // Animazione continua delle orbite e dei pallini
-  useEffect(() => {
-    let lastTime = performance.now();
-    const orbitSpeeds = [0.12, 0.12, 0.12]; // radianti al secondo per ogni orbita - stessa velocità
-    const electronSpeeds = [0.15, 0.12, 0.18]; // radianti al secondo per ogni pallino - velocità molto aumentata
-    
-    function animate(time: number) {
-      const delta = Math.min((time - lastTime) / 1000, 0.016); // Limita delta max a ~60fps
-      lastTime = time;
-      
-      // Pulizia periodica per prevenire accumulo di errori (ogni ~10 secondi)
-      cleanupCounterRef.current += 1;
-      const shouldCleanup = cleanupCounterRef.current % 600 === 0; // 60fps * 10s = 600 frames
-      
-      setOrbitAngles(prev => prev.map((a, i) => {
-        const newAngle = a + orbitSpeeds[i] * delta;
-        return shouldCleanup ? normalizeAngle(newAngle) : normalizeAngle(newAngle);
-      }));
-      
-      setElectronAngles(prev => prev.map((a, i) => {
-        const newAngle = a + electronSpeeds[i] * delta;
-        return shouldCleanup ? normalizeAngle(newAngle) : normalizeAngle(newAngle);
-      }));
-      
-      requestRef.current = requestAnimationFrame(animate);
-    }
-    
-    requestRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(requestRef.current!);
-  }, []);
+  const handleClick = () => {
+    if (isAnimating) return;
 
-  // Funzione per attivare/disattivare l'effetto buco nero al click
-  const handleNucleusClick = () => {
-    // Impedisci qualsiasi azione se l'animazione è già in corso
-    if (isAnimating) {
+    if (phase === 'blackhole') {
+      setPhase('atom');
+      setParticlesConsumed(0);
       return;
     }
 
-    if (animationPhase === 'atom') {
-      // Attiva l'effetto buco nero
-      setIsAnimating(true);
-      setAnimationPhase('explosion');
-      setParticlesConsumed(0); // Reset counter
-      
-      // Dopo l'esplosione, mostra il buco nero
-      setTimeout(() => {
-        setAnimationPhase('blackhole');
-        
-        // Simula l'ingoiamento delle particelle una alla volta
-        atomConfig.nucleus.forEach((_, idx) => {
-          const delay = 300 + idx * 200;
-          setTimeout(() => {
-            setParticlesConsumed(prev => prev + 1);
-          }, delay);
-        });
-        
-        // L'animazione termina dopo che tutte le particelle sono state ingoiate
-        const endDelay = 300 + atomConfig.nucleus.length * 200 + 500;
-        setTimeout(() => {
-          setIsAnimating(false);
-        }, endDelay);
-        
-      }, 1200);
-      
-    } else if (animationPhase === 'blackhole') {
-      // Se è già in modalità buco nero, torna all'atomo solo se l'animazione è completata
-      if (!isAnimating) {
-        setAnimationPhase('atom');
-        setParticlesConsumed(0); // Reset per la prossima volta
-      }
-    }
+    setExplosion({ targets: randomExplosionTargets(), orbitAngles: [...angles.current.orbit] });
+    setIsAnimating(true);
+    setPhase('explosion');
+    setParticlesConsumed(0);
+
+    schedule(() => {
+      setPhase('blackhole');
+      NUCLEUS.forEach((_, i) => {
+        schedule(() => setParticlesConsumed((count) => count + 1), TIMING.swallowStart + i * TIMING.swallowStep);
+      });
+      schedule(
+        () => setIsAnimating(false),
+        TIMING.swallowStart + NUCLEUS.length * TIMING.swallowStep + TIMING.settle,
+      );
+    }, TIMING.explosion);
   };
 
-  // Genera i punti e il path solo quando siamo sul client
-  useEffect(() => {
-    const N = 60; // punti per la smoothness
-    const cx = 200, cy = 200, r = 30; // nucleo atomico piccolo
-    const circlePoints = getCirclePoints(cx, cy, r, N);
-    
-    setPathData(pointsToPath(circlePoints));
-    setIsClient(true);
-  }, []);
-
-  // Non renderizzare nulla durante l'SSR o prima che i dati del path siano pronti
-  if (!isClient || !pathData) {
-    return <div className={`w-full h-full ${className}`}></div>;
-  }
+  const growth = (base: number, step: number) => (particlesConsumed === 0 ? 0 : base + particlesConsumed * step);
 
   return (
-    <div className={`w-full h-full flex items-center justify-center ${className}`} style={{ transform: 'translateX(-80px)' }}>
-      <motion.svg
+    <div
+      ref={containerRef}
+      className={`w-full h-full flex items-center justify-center ${className}`}
+      style={{ transform: 'translateX(-80px)' }}
+    >
+      <svg
         width="100%"
         height="100%"
         viewBox="-100 -100 600 600"
-        style={{ 
-          position: 'absolute',
-          pointerEvents: isAnimating ? 'none' : 'auto' 
-        }}
+        style={{ position: 'absolute', pointerEvents: isAnimating ? 'none' : 'auto' }}
       >
-        {/* Definizione dei filtri */}
         <defs>
           <filter id="atomGlow" x="-20%" y="-20%" width="140%" height="140%">
             <feGaussianBlur stdDeviation="2" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
-
           <filter id="blackHoleGlow" x="-200%" y="-200%" width="500%" height="500%" filterUnits="userSpaceOnUse">
             <feGaussianBlur stdDeviation="6" result="blur" />
             <feDropShadow dx="0" dy="0" stdDeviation="10" floodColor="#000000" floodOpacity="0.6" result="shadow" />
             <feComposite in="SourceGraphic" in2="shadow" operator="over" />
           </filter>
-          
           <radialGradient id="blackHoleGradient" cx="45%" cy="45%" r="70%" gradientUnits="objectBoundingBox">
             <stop offset="0%" stopColor="#000000" stopOpacity="1" />
             <stop offset="20%" stopColor="#0a0a0a" stopOpacity="0.9" />
@@ -238,268 +222,166 @@ export default function HeroShape({ shape, className = '' }: HeroShapeProps) {
             <stop offset="80%" stopColor="#404040" stopOpacity="0.2" />
             <stop offset="100%" stopColor="#000000" stopOpacity="0" />
           </radialGradient>
-          
-          <ellipse id="gravitationalDistortion" cx="200" cy="200" rx="80" ry="40" fill="url(#blackHoleGradient)" opacity="0.4" />
-          
-          <radialGradient id="blackHoleCenter" cx="50%" cy="50%" r="50%" gradientUnits="objectBoundingBox">
-            <stop offset="0%" stopColor="#000000" />
-            <stop offset="100%" stopColor="#000000" />
-          </radialGradient>
         </defs>
 
-        {/* Fase 1: Atomo normale */}
-        {animationPhase === 'atom' && (
+        {phase === 'atom' && (
           <motion.g
             key="atom"
-            initial={shape === 'circle' ? { opacity: 0, scale: 0 } : false}
+            initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
             style={{ transformBox: 'view-box', transformOrigin: '50% 50%' }}
           >
-            {/* Orbite ellittiche animate e pallini sincronizzati */}
-            {atomConfig.orbits.map((orbit, idx) => {
-              // Angolo di rotazione corrente per questa orbita
-              const angle = orbitAngles[idx];
-              // Angolo di posizione corrente per il pallino
-              const eAngle = electronAngles[idx];
-              // Calcola la posizione del pallino lungo l'ellisse ruotata
-              const x = orbit.rx * Math.cos(eAngle);
-              const y = orbit.ry * Math.sin(eAngle);
-              const rotX = x * Math.cos(angle) - y * Math.sin(angle);
-              const rotY = x * Math.sin(angle) + y * Math.cos(angle);
+            {ORBITS.map((orbit, i) => {
+              const electron = electronPosition(orbit, orbit.angle, orbit.electronAngle);
               return (
-                <g key={`orbit-${idx}`}> 
+                <g key={i}>
                   <ellipse
-                    cx={200}
-                    cy={200}
+                    ref={(el) => {
+                      ellipseRefs.current[i] = el;
+                    }}
+                    cx={CENTER}
+                    cy={CENTER}
                     rx={orbit.rx}
                     ry={orbit.ry}
                     fill="none"
-                    stroke="#4B5563"
+                    stroke={ORBIT_COLOR}
                     strokeWidth={2}
                     strokeOpacity={0.5}
-                    transform={`rotate(${(angle * 180) / Math.PI} 200 200)`}
+                    transform={orbitTransform(orbit.angle)}
                   />
-                  {/* Elettrone che segue l'orbita, sincronizzato con la rotazione */}
-                  <motion.circle
-                    r={orbit.electronSize}
-                    fill="#4B5563"
+                  <circle
+                    ref={(el) => {
+                      electronRefs.current[i] = el;
+                    }}
+                    r={ELECTRON_RADIUS}
+                    fill={ORBIT_COLOR}
                     opacity="0.9"
-                    cx={200 + rotX}
-                    cy={200 + rotY}
+                    cx={electron.x}
+                    cy={electron.y}
                   />
-                  {/* Solo sulla prima orbita, disegna il nucleo */}
-                  {idx === 0 && (
-                    <>
-                      {/* Area cliccabile invisibile attorno al nucleo */}
-                      <circle
-                        cx="200"
-                        cy="200"
-                        r="50"
-                        fill="transparent"
-                        onClick={handleNucleusClick}
-                      />
-                      {/* Particelle del nucleo */}
-                      {atomConfig.nucleus.map((particle, pidx) => (
-                        <motion.circle
-                          key={`nucleus-${pidx}`}
-                          cx={particle.x}
-                          cy={particle.y}
-                          r={particle.r}
-                          fill={particle.color}
-                          filter="url(#atomGlow)"
-                          onClick={handleNucleusClick}
-                          style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ 
-                            opacity: 1, 
-                            scale: 1,
-                            x: [0, Math.sin(pidx) * 8, -Math.cos(pidx) * 5, Math.cos(pidx * 2) * 7, 0],
-                            y: [0, Math.cos(pidx) * 6, Math.sin(pidx * 2) * 8, -Math.sin(pidx) * 5, 0]
-                          }}
-                          transition={{ 
-                            opacity: { duration: 0.6, delay: 0.6 + pidx * 0.1 },
-                            scale: { duration: 0.6, delay: 0.6 + pidx * 0.1, ease: "backOut" },
-                            x: { 
-                              duration: 3 + pidx % 3, 
-                              repeat: Infinity, 
-                              repeatType: "reverse",
-                              ease: "easeInOut",
-                              delay: pidx * 0.2
-                            },
-                            y: { 
-                              duration: 4 + pidx % 2, 
-                              repeat: Infinity, 
-                              repeatType: "reverse", 
-                              ease: "easeInOut",
-                              delay: pidx * 0.2
-                            }
-                          }}
-                        />
-                      ))}
-                    </>
-                  )}
+                  {/* Drawn inside the innermost orbit so the outer orbits pass over it. */}
+                  {i === 0 && <Nucleus onClick={handleClick} />}
                 </g>
               );
             })}
           </motion.g>
         )}
 
-        {/* Fase 2: Esplosione degli atomi */}
-        {animationPhase === 'explosion' && (
-          <motion.g key="explosion">
-            {/* Orbite che svaniscono */}
-            {atomConfig.orbits.map((orbit, idx) => (
+        {phase === 'explosion' && explosion && (
+          <g key="explosion">
+            {ORBITS.map((orbit, i) => (
               <motion.ellipse
-                key={`orbit-explode-${idx}`}
-                cx="200"
-                cy="200"
+                key={i}
+                cx={CENTER}
+                cy={CENTER}
                 rx={orbit.rx}
                 ry={orbit.ry}
                 fill="none"
-                stroke="#4B5563"
+                stroke={ORBIT_COLOR}
                 strokeWidth={2}
                 strokeOpacity={0.5}
-                transform={`rotate(${orbit.rotation} 200 200)`}
+                transform={orbitTransform(explosion.orbitAngles[i])}
                 initial={{ opacity: 0.5 }}
                 animate={{ opacity: 0, strokeWidth: 0 }}
                 transition={{ duration: 0.4 }}
               />
             ))}
-            
-            {/* Atomi che si allontanano */}
-            {atomConfig.nucleus.map((particle, idx) => (
+            {NUCLEUS.map((nucleon, i) => (
               <motion.circle
-                key={`nucleus-explode-${idx}`}
-                cx={particle.x}
-                cy={particle.y}
-                r={particle.r}
-                fill={particle.color}
+                key={i}
+                cx={nucleon.x}
+                cy={nucleon.y}
+                r={NUCLEON_RADIUS}
+                fill={nucleon.color}
                 filter="url(#atomGlow)"
                 style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
                 initial={{ opacity: 1, scale: 1 }}
-                animate={{ 
-                  x: explosionDirections[idx].x - particle.x,
-                  y: explosionDirections[idx].y - particle.y,
+                animate={{
+                  x: explosion.targets[i].x - nucleon.x,
+                  y: explosion.targets[i].y - nucleon.y,
                   opacity: 0.8,
-                  scale: 1.2
+                  scale: 1.2,
                 }}
-                transition={{ 
-                  duration: 1.0,
-                  delay: explosionDirections[idx].delay,
-                  ease: "easeOut"
-                }}
+                transition={{ duration: 1.0, delay: explosion.targets[i].delay, ease: 'easeOut' }}
               />
             ))}
-          </motion.g>
+          </g>
         )}
 
-        {/* Fase 3: Buco nero che risucchia */}
-        {animationPhase === 'blackhole' && (
-          <motion.g key="blackhole">
-            {/* Area cliccabile per disattivare il buco nero */}
-            <circle
-              cx="200"
-              cy="200"
-              r="100"
-              fill="transparent"
-              onClick={handleNucleusClick}
-            />
-            {/* Buco nero centrale che cresce in base alle particelle ingoiate */}
+        {phase === 'blackhole' && explosion && (
+          <g key="blackhole">
+            <circle cx={CENTER} cy={CENTER} r="100" fill="transparent" onClick={handleClick} />
             <motion.circle
-              cx="200"
-              cy="200"
+              cx={CENTER}
+              cy={CENTER}
               r="30"
-              fill="url(#blackHoleCenter)"
+              fill="#000000"
               filter="url(#blackHoleGlow)"
               style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
               initial={{ scale: 0 }}
-              animate={{ 
-                scale: particlesConsumed === 0 ? 0 : 0.5 + (particlesConsumed * 0.6), // Cresce con ogni particella
-                transition: { 
-                  duration: 0.3,
-                  ease: "easeOut"
-                }
-              }}
+              animate={{ scale: growth(0.5, 0.6), transition: { duration: 0.3, ease: 'easeOut' } }}
             />
-            
-            {/* Alone gravitazionale distorto che ruota lentamente */}
             <motion.ellipse
-              cx="200"
-              cy="200"
+              cx={CENTER}
+              cy={CENTER}
               rx="80"
               ry="40"
               fill="url(#blackHoleGradient)"
+              style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
               initial={{ scale: 0, opacity: 0 }}
-              animate={{ 
-                scale: particlesConsumed === 0 ? 0 : 0.8 + (particlesConsumed * 0.4),
+              animate={{
+                scale: growth(0.8, 0.4),
                 opacity: particlesConsumed === 0 ? 0 : Math.min(0.4, 0.1 + particlesConsumed * 0.05),
                 rotate: 360,
-                transition: { 
+                transition: {
                   duration: 0.3,
-                  ease: "easeOut",
-                  rotate: {
-                    duration: 15,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }
-                }
+                  ease: 'easeOut',
+                  rotate: { duration: 15, repeat: Infinity, ease: 'linear' },
+                },
               }}
-              style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
             />
-            
-            {/* Secondo anello di distorsione gravitazionale */}
             <motion.ellipse
-              cx="200"
-              cy="200"
+              cx={CENTER}
+              cy={CENTER}
               rx="60"
               ry="80"
               fill="url(#blackHoleGradient)"
+              style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
               initial={{ scale: 0, opacity: 0 }}
-              animate={{ 
-                scale: particlesConsumed === 0 ? 0 : 0.6 + (particlesConsumed * 0.3),
+              animate={{
+                scale: growth(0.6, 0.3),
                 opacity: particlesConsumed === 0 ? 0 : Math.min(0.3, 0.05 + particlesConsumed * 0.04),
                 rotate: -360,
-                transition: { 
+                transition: {
                   duration: 0.3,
-                  ease: "easeOut",
-                  rotate: {
-                    duration: 25,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }
-                }
+                  ease: 'easeOut',
+                  rotate: { duration: 25, repeat: Infinity, ease: 'linear' },
+                },
               }}
-              style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
             />
-            
-            {/* Atomi che vengono risucchiati */}
-            {atomConfig.nucleus.map((particle, idx) => (
+            {NUCLEUS.map((nucleon, i) => (
               <motion.circle
-                key={`nucleus-sucked-${idx}`}
-                cx={explosionDirections[idx].x}
-                cy={explosionDirections[idx].y}
-                r={particle.r}
-                fill={particle.color}
+                key={i}
+                cx={explosion.targets[i].x}
+                cy={explosion.targets[i].y}
+                r={NUCLEON_RADIUS}
+                fill={nucleon.color}
                 filter="url(#atomGlow)"
                 style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
                 initial={{ opacity: 0.8, scale: 1.2 }}
-                animate={{ 
-                  x: 200 - explosionDirections[idx].x,
-                  y: 200 - explosionDirections[idx].y,
+                animate={{
+                  x: CENTER - explosion.targets[i].x,
+                  y: CENTER - explosion.targets[i].y,
                   opacity: 0,
-                  scale: 0.1
+                  scale: 0.1,
                 }}
-                transition={{ 
-                  duration: 1.0 + idx * 0.2,
-                  delay: 0.3 + idx * 0.1,
-                  ease: [0.5, 0.05, 0.5, 0.95]
-                }}
+                transition={{ duration: 1.0 + i * 0.2, delay: 0.3 + i * 0.1, ease: [0.5, 0.05, 0.5, 0.95] }}
               />
             ))}
-          </motion.g>
+          </g>
         )}
-      </motion.svg>
+      </svg>
     </div>
   );
-} 
+}

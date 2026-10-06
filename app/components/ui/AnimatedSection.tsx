@@ -1,99 +1,55 @@
 'use client';
 
-import { ReactNode } from 'react';
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import type { ReactNode } from 'react';
+import { motion, type Variants } from 'framer-motion';
 
-type AnimatedSectionProps = {
+type Direction = 'left' | 'right' | 'up';
+
+interface AnimatedSectionProps {
   id: string;
-  title: string;
   children: ReactNode;
-  variant?: 'left' | 'right' | 'up';
-  showTitle?: boolean;
+  variant?: Direction;
+  /** When false the section spans the full width instead of the centered container. */
+  contained?: boolean;
   className?: string;
+}
+
+const EASE_OUT_EXPO: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+const OFFSET: Record<Direction, { x: number; y: number }> = {
+  left: { x: -50, y: 0 },
+  right: { x: 50, y: 0 },
+  up: { x: 0, y: 50 },
 };
 
-export default function AnimatedSection({ 
-  id, 
-  title, 
-  children, 
+const contentVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { delay: 0.3, duration: 0.6, staggerChildren: 0.1 } },
+};
+
+export default function AnimatedSection({
+  id,
+  children,
   variant = 'up',
-  showTitle = true,
-  className = ''
+  contained = true,
+  className = '',
 }: AnimatedSectionProps) {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.2,
-  });
-
-  const variants = {
-    hidden: {
-      opacity: 0,
-      x: variant === 'left' ? -50 : variant === 'right' ? 50 : 0,
-      y: variant === 'up' ? 50 : 0,
-    },
-    visible: {
-      opacity: 1,
-      x: 0,
-      y: 0,
-      transition: {
-        duration: 0.7,
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-      }
-    }
-  };
-
-  const titleVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-      }
-    }
-  };
-
-  const contentVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        delay: 0.3,
-        duration: 0.6,
-        staggerChildren: 0.1,
-      }
-    }
+  const wrapperVariants: Variants = {
+    hidden: { opacity: 0, ...OFFSET[variant] },
+    visible: { opacity: 1, x: 0, y: 0, transition: { duration: 0.7, ease: EASE_OUT_EXPO } },
   };
 
   return (
-    <section 
+    <motion.section
       id={id}
-      ref={ref}
-      className={`container mx-auto px-4 py-20 md:py-32 ${className}`}
+      className={`${contained ? 'container mx-auto' : 'w-full'} ${className}`}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
     >
-      {showTitle && (
-        <motion.h2 
-          className="section-heading"
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          variants={titleVariants}
-        >
-          {title}
-        </motion.h2>
-      )}
-
-      <motion.div
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-        variants={variants}
-        className="space-y-8"
-      >
-        <motion.div variants={contentVariants}>
-          {children}
-        </motion.div>
+      <motion.div variants={wrapperVariants} className="space-y-8">
+        <motion.div variants={contentVariants}>{children}</motion.div>
       </motion.div>
-    </section>
+    </motion.section>
   );
-} 
+}

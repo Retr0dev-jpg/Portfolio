@@ -1,21 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { buildContactEmail, buildContactMailtoHref } from '@/app/lib/contactEmail';
+import { useIsClient } from '@/app/hooks/useIsClient';
 
 interface ObfuscatedEmailProps {
   className?: string;
   subject?: string;
 }
 
+/** Renders the address only on the client so it never appears in the SSR HTML. */
 export default function ObfuscatedEmail({ className, subject }: ObfuscatedEmailProps) {
-  const [email, setEmail] = useState<string | null>(null);
+  const isClient = useIsClient();
 
-  useEffect(() => {
-    setEmail(buildContactEmail());
-  }, []);
-
-  if (!email) {
+  if (!isClient) {
     return (
       <span className={className} aria-busy="true">
         …
@@ -23,11 +20,9 @@ export default function ObfuscatedEmail({ className, subject }: ObfuscatedEmailP
     );
   }
 
-  const href = buildContactMailtoHref(subject);
-
   return (
-    <a href={href} className={className}>
-      {email}
+    <a href={buildContactMailtoHref(subject)} className={className}>
+      {buildContactEmail()}
     </a>
   );
 }
