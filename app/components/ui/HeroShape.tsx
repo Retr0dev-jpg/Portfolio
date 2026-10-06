@@ -195,6 +195,7 @@ export default function HeroShape({ className = '' }: { className?: string }) {
   return (
     <div
       ref={containerRef}
+      data-cursor="hollow"
       className={`w-full h-full flex items-center justify-center ${className}`}
       style={{ transform: 'translateX(-80px)' }}
     >

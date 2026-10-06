@@ -102,10 +102,11 @@
   html.has-fine-pointer body {
     -webkit-user-select: none;
     user-select: none;
-    cursor: none !important;
   }
 
-  html.has-fine-pointer :is(a, button, input, textarea, select, label, [role="button"]) {
+  /* Covers every element so `cursor-*` utilities can't bring back the system cursor. */
+  html.has-fine-pointer,
+  html.has-fine-pointer * {
     cursor: none !important;
   }
 }

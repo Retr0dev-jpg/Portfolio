@@ -10,10 +10,8 @@ export const normalizeAngle = (angle: number) => {
   return normalized < 0 ? normalized + TAU : normalized;
 };
 
-/** Shortest signed difference between two angles, in (-π, π]. */
+/** Shortest signed difference between two angles, in (-π, π]. Inputs may be unbounded. */
 export const angleDelta = (from: number, to: number) => {
-  let diff = to - from;
-  if (diff > Math.PI) diff -= TAU;
-  else if (diff < -Math.PI) diff += TAU;
-  return diff;
+  const diff = normalizeAngle(to - from);
+  return diff > Math.PI ? diff - TAU : diff;
 };

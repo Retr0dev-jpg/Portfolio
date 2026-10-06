@@ -25,7 +25,7 @@ export default function HeroSection() {
             <InteractiveTagline />
           </div>
           <div
-            className="absolute right-[-600px] top-1/2 -translate-y-1/2 w-[400px] h-[400px] opacity-0 animate-fade-in hidden md:block cursor-pointer"
+            className="absolute right-[-600px] top-1/2 -translate-y-1/2 w-[400px] h-[400px] opacity-0 animate-fade-in hidden md:block"
             style={revealDelay(900)}
           >
             <HeroShape className="text-accent" />

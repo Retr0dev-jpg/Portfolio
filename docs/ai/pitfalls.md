@@ -35,8 +35,10 @@ Problemi reali già incontrati in questo progetto. Ogni voce indica la causa e l
 
 - **Header fisso:** copre la parte alta della viewport. `scrollToSection` centra la sezione (`block: 'center'`) proprio per questo.
 - **Lenis:** c'è una sola istanza (`useLenis` in `PointerEffects`). Non crearne un'altra. Il middle-click attiva l'auto-scroll direzionale del cursore.
+- **Rotazione della freccia dell'auto-scroll:** `orbitAngle` cresce senza limiti di proposito, perché normalizzarlo farebbe girare all'indietro di 360° la `transition` CSS del `transform`. Per questo `angleDelta` deve accettare angoli di qualsiasi ampiezza: con una sola correzione di ±2π, dopo un giro completo la freccia tornava indietro.
 - **Dispositivi ibridi:** `useIsTouchDevice` passa a `true` al primo `touchstart`. Non dedurre il touch dalla larghezza dello schermo.
 - **Blocchi voluti:** il menu contestuale e la selezione del testo sono disabilitati sui dispositivi con puntatore fine (classe `has-fine-pointer`). È una scelta del proprietario: non rimuoverla.
+- **Cursore di sistema nascosto ovunque:** con `has-fine-pointer`, `globals.css` imposta `cursor: none` su ogni elemento, quindi le utility `cursor-*` di Tailwind non hanno effetto su desktop. Per dare un feedback di hover usa `data-cursor` sull'elemento che si vede davvero (se ha un `transform`, sul nodo trasformato: l'hit-test usa `getBoundingClientRect`).
 - **Drag dei nodi Works:** posizioni in percentuale; un tap senza movimento apre o fissa il dettaglio. Gli elementi trascinabili sono marcati con `data-node-draggable`.
 - **Evidenziazione delle skill:** tempi in `TIMING` (dissolvenza 500ms, attesa 700ms per lo scroll, sfasamento 100ms, durata 5s). Cambiandoli si desincronizza lo scroll verso `#skills`.
 
