@@ -15,13 +15,14 @@ Next.js 16 · React 19 · TypeScript · Tailwind CSS v4 · Framer Motion · Leni
 ```
 app/
 ├── api/contact/route.ts     # Endpoint del form: rate limit → zod → Turnstile → Resend
+├── index.md/route.ts        # Versione Markdown della pagina per gli agenti AI
 ├── config/site.ts           # Brand, URL, social, CV, feature flag (unica fonte)
-├── data/                    # Contenuti: navigazione, hero, esperienze, skill, progetti
+├── data/                    # Contenuti: navigazione, hero, about, esperienze, skill, progetti, contatti
 ├── context/                 # StackHighlightContext (progetto → skill evidenziate)
 ├── hooks/                   # Sezione attiva, Lenis, drag dei nodi, form contatti, ...
 ├── lib/
 │   ├── contact/             # Schema, limiti, rate limit, Turnstile, template email
-│   └── ...                  # math, scroll, time, cursorEvents, email offuscata
+│   └── ...                  # math, scroll, time, cursorEvents, email offuscata, Markdown per agenti
 ├── components/
 │   ├── effects/             # Cursore custom, smooth scroll, particelle (solo client)
 │   ├── layout/              # SiteShell, Header, MobileMenu, slider nav, banner, footer
@@ -48,6 +49,10 @@ Per modificare i contenuti basta toccare `app/data/` e `app/config/site.ts`: i c
 - **Smooth scroll**: powered by Lenis, con scroll direzionale sul middle-click (desktop).
 - **Form contatti**: invio email server-side via Resend con validazione zod, rate limit per IP e protezione anti-bot Cloudflare Turnstile.
 - **Footer**: le stelle GitHub sono lette lato server e rivalidate ogni ora (ISR).
+- **Markdown per agenti AI**: come la funzione "Markdown for Agents" di Cloudflare, la pagina è disponibile in Markdown su [`/index.md`](https://retr0hub.dev/index.md), oppure su `/` inviando `Accept: text/markdown`. È generata dagli stessi dati della UI, senza menu, script e grafica:
+  ```bash
+  curl "https://retr0hub.dev/" -H "Accept: text/markdown"
+  ```
 
 ---
 

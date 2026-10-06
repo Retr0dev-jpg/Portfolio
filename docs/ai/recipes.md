@@ -40,9 +40,18 @@ Procedure per le modifiche più frequenti. Ognuna termina con la [definition of 
 | Parole rotanti e tagline del hero | `app/data/hero.ts` |
 | Nome, social, CV, licenza, repository | `app/config/site.ts` |
 | Voci del menu | `HEADER_NAV` in `app/data/navigation.ts` |
-| About, intestazione Contact, footer | direttamente nella sezione: sono testi unici, non dati ripetuti |
+| About | `ABOUT` in `app/data/about.ts` |
+| Intestazione, descrizione e titolo del form Contact | `CONTACT_INTRO` in `app/data/contact.ts` |
+| Footer | direttamente in `FooterSection`: è un testo unico e non compare nella versione Markdown |
 | Data del CV | variabile d'ambiente `NEXT_PUBLIC_CV_UPDATED_AT` |
 | PDF del CV | sostituisci il file in `public/CV/` mantenendo il nome, oppure aggiorna `SITE.cv.href` |
+
+## Versione Markdown per gli agenti AI
+
+`/index.md` (e `/` richiesto con `Accept: text/markdown`) è generata da `renderSiteMarkdown()` in `app/lib/siteMarkdown.ts`, che legge gli stessi dati della UI. Progetti, skill, esperienze e testi in `app/data/` compaiono da soli.
+- Nuova sezione con contenuti: aggiungi il blocco corrispondente in `renderSiteMarkdown()`, nello stesso ordine di `SECTION_ORDER`.
+- Non inserire l'email: è offuscata di proposito (`ObfuscatedEmail`). Per i contatti si rimanda al form e ai social.
+- Verifica: `curl.exe -H "Accept: text/markdown" http://localhost:3000/` deve restituire `Content-Type: text/markdown`, mentre `curl.exe http://localhost:3000/` deve restituire l'HTML.
 
 ## Aggiungere una sezione
 
@@ -61,7 +70,7 @@ Procedure per le modifiche più frequenti. Ognuna termina con la [definition of 
    }
    ```
    Se ha uno sfondo a tutta larghezza usa `contained={false}`. Per una sezione senza animazione d'entrata usa un `<section id={...}>` semplice (come `AboutSection`).
-3. Metti le parti interattive in `sections/nome/` con `'use client'`, e i contenuti in `app/data/nome.ts`.
+3. Metti le parti interattive in `sections/nome/` con `'use client'`, e i contenuti in `app/data/nome.ts`. Se la sezione ha contenuti testuali, aggiungili anche alla [versione Markdown](#versione-markdown-per-gli-agenti-ai).
 4. Inseriscila in `app/page.tsx` nello stesso ordine di `SECTION_ORDER`. Se è pesante e sotto la piega, caricala con `dynamic()`.
 5. Ricorda che `section` riceve dal CSS base `min-height: 100dvh` e il padding verticale: sovrascrivili con utility se serve (`min-h-[550px]`).
 

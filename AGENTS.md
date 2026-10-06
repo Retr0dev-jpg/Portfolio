@@ -7,7 +7,7 @@ Entrypoint per agenti AI (Cursor, Claude Code, Codex, Copilot, ...). Leggi quest
 Portfolio single-page di Marco Simone Cannizzaro, online su https://retr0hub.dev e deployato su Vercel.
 Stack: Next.js 16 (App Router, Turbopack), React 19, TypeScript strict, Tailwind CSS v4, Framer Motion, Lenis, Resend, zod e Cloudflare Turnstile.
 
-Una sola pagina (`app/page.tsx`) compone sezioni ancorate (`#home`, `#about`, `#works`, `#skills`, `#projects`, `#contact`). L'unico endpoint è `POST /api/contact`.
+Una sola pagina (`app/page.tsx`) compone sezioni ancorate (`#home`, `#about`, `#works`, `#skills`, `#projects`, `#contact`). Gli endpoint sono `POST /api/contact` e `GET /index.md`, la versione Markdown della pagina per gli agenti AI, servita anche su `/` con `Accept: text/markdown`.
 
 ## Comandi
 
@@ -25,17 +25,18 @@ Non esistono test automatici: la verifica è fatta da lint, typecheck, build e u
 | Cartella | Contenuto | Quando toccarla |
 |---|---|---|
 | `app/config/site.ts` | `SITE` (brand, URL, social, CV), `FEATURES` (flag), `BUILD_INFO`, `TURNSTILE_SITE_KEY` | Dati globali o un nuovo flag |
-| `app/data/` | Contenuti tipizzati: `navigation`, `hero`, `experiences`, `skills`, `projects` | Testi, progetti, skill, esperienze |
+| `app/data/` | Contenuti tipizzati: `navigation`, `hero`, `about`, `experiences`, `skills`, `projects`, `contact` | Testi, progetti, skill, esperienze |
 | `app/components/sections/` | Una sezione per file, con una sottocartella per i suoi pezzi (`works/`, `skills/`, ...) | UI di una sezione |
 | `app/components/layout/` | `SiteShell`, `Header`, `MobileMenu`, `VerticalSliderNav`, `ConstructionBanner`, `FooterSection` | Struttura della pagina |
 | `app/components/effects/` | Cursore custom, Lenis, particelle (solo client, caricati in lazy) | Effetti globali |
 | `app/components/ui/` | Primitive riusabili: `Icons`, `Tag`, `FloatingTooltip`, `DotDivider`, `AnimatedSection`, `HeroShape` | Pezzi condivisi |
 | `app/hooks/` | Logica riusabile (`useActiveSection`, `useLenis`, `useDraggableNodes`, `useContactForm`, ...) | Stato o effetti non visivi |
 | `app/context/` | `StackHighlightContext` (un progetto evidenzia le skill del suo stack) | Comunicazione tra sezioni |
-| `app/lib/` | Funzioni pure e helper (`math`, `scroll`, `time`, `cursorEvents`, `contact/*`) | Logica senza React |
+| `app/lib/` | Funzioni pure e helper (`math`, `scroll`, `time`, `cursorEvents`, `siteMarkdown`, `contact/*`) | Logica senza React |
 | `app/api/contact/route.ts` | Rate limit → JSON → zod → Turnstile → Resend | Backend del form |
+| `app/index.md/route.ts` | Versione Markdown statica della pagina (generata da `siteMarkdown`) | Contenuti per gli agenti AI |
 | `app/globals.css` | `@theme` (token), `@layer base`, CSS dei componenti complessi | Token e stili globali |
-| `next.config.js` | Default delle variabili d'ambiente, header di sicurezza, CSP | Nuovi domini esterni, variabili d'ambiente |
+| `next.config.js` | Default delle variabili d'ambiente, header di sicurezza, CSP, rewrite Markdown | Nuovi domini esterni, variabili d'ambiente |
 
 ## Regole d'oro
 

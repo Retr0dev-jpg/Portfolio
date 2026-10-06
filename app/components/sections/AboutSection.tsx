@@ -1,4 +1,5 @@
 import { SITE } from '@/app/config/site';
+import { ABOUT } from '@/app/data/about';
 import { SECTION_ID } from '@/app/data/navigation';
 
 const EMOJI_SHADOW = 'drop-shadow-[0_10px_10px_rgba(0,0,0,0.25)]';
@@ -28,16 +29,13 @@ export default function AboutSection() {
         <h2 className="text-white font-mono text-3xl md:text-4xl font-bold tracking-tight leading-snug">{SITE.owner}</h2>
         <div className="w-10 h-px bg-white/25" />
         <div className="flex flex-col gap-3">
-          <p className="text-white/70 text-sm md:text-base leading-relaxed">
-            Classe 2007. Scrivo codice da quando capire come funzionano le cose era più forte di qualsiasi altra distrazione.
-          </p>
-          <p className="text-white/70 text-sm md:text-base leading-relaxed">
-            Costruisco interfacce HMI per sistemi industriali e prodotti web — minimalisti per design, solidi nell&apos;architettura.
-          </p>
+          {ABOUT.paragraphs.map((paragraph) => (
+            <p key={paragraph} className="text-white/70 text-sm md:text-base leading-relaxed">
+              {paragraph}
+            </p>
+          ))}
         </div>
-        <p className="text-white text-sm md:text-base italic font-normal">
-          Il buon codice non si vede: si sente. E ogni bug trovato in dev vale più di mille scuse in prod.
-        </p>
+        <p className="text-white text-sm md:text-base italic font-normal">{ABOUT.motto}</p>
       </div>
     </section>
   );

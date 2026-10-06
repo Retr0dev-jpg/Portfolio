@@ -16,7 +16,21 @@ app/layout.tsx              server: font, metadata, <LazyEffects/>, Analytics
       └─ FooterSection      server async: stelle GitHub con fetch `revalidate: 3600`
 ```
 
-La route `/` è statica con ISR di un'ora (per via del fetch del footer). `/api/contact` è dinamica.
+La route `/` è statica con ISR di un'ora (per via del fetch del footer). `/api/contact` è dinamica. `/index.md` è un route handler statico (`force-static`) con la versione Markdown della pagina.
+
+## Versione Markdown per gli agenti AI
+
+Replica la funzione "Markdown for Agents" di Cloudflare: gli agenti che chiedono `Accept: text/markdown` ricevono il contenuto senza UI.
+
+```
+GET /  + Accept: text/markdown  ──rewrite beforeFiles (next.config.js)──▶ /index.md
+GET /index.md                   ──▶ app/index.md/route.ts ──▶ renderSiteMarkdown() (app/lib/siteMarkdown.ts)
+```
+
+- `renderSiteMarkdown()` è una funzione pura che legge `SITE` e `app/data/*`: un solo punto per i contenuti, nessun testo duplicato.
+- La risposta ha `Content-Type: text/markdown; charset=utf-8` e `x-markdown-tokens` (stima di circa 4 caratteri per token, come Cloudflare).
+- Il rewrite sta in `beforeFiles` perché `/` è una pagina statica: gli `afterFiles` arrivano dopo il controllo del filesystem e non verrebbero mai applicati.
+- `layout.tsx` dichiara `<link rel="alternate" type="text/markdown">` tramite `metadata.alternates.types`.
 
 ## Isole client
 
@@ -36,7 +50,7 @@ app/data/*.ts ──────┼──▶ componenti (sola lettura, nessun fe
 next.config.js env ─┘
 ```
 
-- `app/data/*` esporta array `readonly` tipizzati (`PROJECTS`, `SKILLS`, `EXPERIENCES`, `HEADER_NAV`, ...) e i tipi relativi (`Project`, `Skill`, `StackId`, `SectionId`, ...).
+- `app/data/*` esporta array e oggetti `readonly` tipizzati (`PROJECTS`, `SKILLS`, `EXPERIENCES`, `HEADER_NAV`, `ABOUT`, `CONTACT_INTRO`, ...) e i tipi relativi (`Project`, `Skill`, `StackId`, `SectionId`, ...).
 - Gli id delle sezioni vengono **solo** da `SECTION_ID` in `app/data/navigation.ts`. `SECTION_ORDER` guida sia lo slider verticale sia la sezione attiva.
 - `Project.stack` è un array di `StackId`: è il collegamento progetto → card skill.
 

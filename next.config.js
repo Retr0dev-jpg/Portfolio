@@ -25,8 +25,24 @@ const nextConfig = {
     NEXT_PUBLIC_GIT_COMMIT_SHA: process.env.VERCEL_GIT_COMMIT_SHA ?? '',
     NEXT_PUBLIC_BUILD_TIME: new Date().toISOString(),
   },
+  async rewrites() {
+    return {
+      // `/` is a static page, so the rewrite must run before the filesystem check.
+      beforeFiles: [
+        {
+          source: '/',
+          has: [{ type: 'header', key: 'accept', value: '.*text/markdown.*' }],
+          destination: '/index.md',
+        },
+      ],
+    };
+  },
   async headers() {
     return [
+      {
+        source: '/',
+        headers: [{ key: 'Vary', value: 'Accept' }],
+      },
       {
         source: '/(.*)',
         headers: [

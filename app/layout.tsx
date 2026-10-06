@@ -6,6 +6,7 @@ import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import LazyEffects from './components/effects/LazyEffects';
 import { FEATURES, SITE } from './config/site';
+import { MARKDOWN_PATH } from './lib/siteMarkdown';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -32,6 +33,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: `${SITE.brand} Portfolio`,
   description: `Portfolio di ${SITE.owner} — Full-stack developer, HMI specialist, codename ${SITE.brand}. If I can script it, I will.`,
+  alternates: {
+    types: { 'text/markdown': MARKDOWN_PATH },
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import AnimatedSection from '../ui/AnimatedSection';
 import ContactInfo from './contact/ContactInfo';
+import { CONTACT_INTRO } from '@/app/data/contact';
 import { SECTION_ID } from '@/app/data/navigation';
 
 const ContactForm = dynamic(() => import('./contact/ContactForm'));
@@ -40,13 +41,12 @@ export default function ContactSection() {
           <div className="relative">
             <FloatingEmojis items={LEFT_EMOJIS} />
             <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 relative z-10">
-              Parliamo del tuo
+              {CONTACT_INTRO.heading.lead}
               <br />
-              <span className="text-accent font-mono">prossimo progetto_</span>
+              <span className="text-accent font-mono">{CONTACT_INTRO.heading.highlight}</span>
             </h2>
             <p className="text-base md:text-lg text-gray-600 mb-8 md:mb-10 leading-relaxed relative z-10">
-              Sono sempre interessato a nuove opportunità e collaborazioni. Che tu abbia un&apos;idea da realizzare o
-              semplicemente voglia fare una chiacchierata, sarò felice di sentirti.
+              {CONTACT_INTRO.description}
             </p>
             <ContactInfo />
           </div>
@@ -54,7 +54,7 @@ export default function ContactSection() {
           <div className="relative">
             <FloatingEmojis items={RIGHT_EMOJIS} />
             <div className="bg-white rounded-2xl shadow-xl p-5 md:p-8 border border-gray-100 relative z-10">
-              <h3 className="text-xl md:text-2xl font-bold mb-5 md:mb-6 text-gray-900">Invia un messaggio</h3>
+              <h3 className="text-xl md:text-2xl font-bold mb-5 md:mb-6 text-gray-900">{CONTACT_INTRO.formTitle}</h3>
               <ContactForm />
             </div>
           </div>

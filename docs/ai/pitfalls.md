@@ -18,6 +18,8 @@ Problemi reali già incontrati in questo progetto. Ogni voce indica la causa e l
 - **Niente lavoro all'import dei moduli server** che dipenda da segreti: `new Resend(key)` a livello di modulo faceva fallire `next build` senza `RESEND_API_KEY`. Crea i client dentro l'handler.
 - **Default delle variabili d'ambiente in `next.config.js`**: usa `??`, mai valori forzati, altrimenti le variabili di Vercel vengono ignorate.
 - **ISR della home:** il fetch delle stelle GitHub nel footer rende `/` rivalidata ogni ora. Un fetch senza `revalidate` (o con `cache: 'no-store'`) la renderebbe dinamica: evitalo.
+- **`Vary` sulle pagine App Router:** il runtime delle pagine fa `res.setHeader('Vary', ...)` e sovrascrive il `Vary: Accept` dichiarato in `next.config.js`. Con `next start` l'HTML di `/` non lo espone, mentre la risposta Markdown sì. Non è un problema per la cache di Vercel, perché il rewrite su `Accept` viene valutato prima della cache e le due versioni hanno chiavi diverse (`/` e `/index.md`). Non aggirarlo riscrivendo gli header a mano.
+- **Rewrite verso pagine statiche:** usa `beforeFiles`. Un rewrite restituito come array semplice (`afterFiles`) viene valutato dopo le pagine statiche e non scatta mai su `/`.
 - **Immagini remote:** le icone devicon usano `next/image` con `unoptimized` (sono SVG da CDN); il dominio deve stare in `img-src` della CSP.
 - **Niente `disabled` nativo guidato da stato solo client** (es. token Turnstile): al reload il browser ripristina lo stato dei controlli del form prima dell'idratazione e React segnala un mismatch. Usa `aria-disabled` con le varianti `aria-disabled:` e blocca l'azione nell'handler (vedi il bottone di `ContactForm`).
 - **`suppressHydrationWarning` su `<html>` e `<body>`** serve per gli attributi iniettati dalle estensioni del browser. Non usarlo altrove per nascondere mismatch veri: usa `useIsClient()`.
@@ -58,3 +60,4 @@ Problemi reali già incontrati in questo progetto. Ogni voce indica la causa e l
 - `node.period` (nodi desktop, con `-`) e `periodShort` (accordion mobile, con `–`) sono volutamente diversi: rispecchiano il design originale.
 - `Project.stack` deve contenere solo `StackId` esistenti in `SKILLS`: il typecheck lo garantisce, non aggirarlo con cast.
 - Il nome del file del CV contiene spazi: in `SITE.cv.href` va codificato (`%20`).
+- **Email fuori dal Markdown:** `renderSiteMarkdown()` non deve includere `buildContactEmail()`. L'indirizzo è offuscato apposta per non finire nell'HTML, e `/index.md` è testo statico leggibile da qualsiasi scraper.
