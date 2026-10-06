@@ -5,4 +5,4 @@ export const ROTATING_WORD_GROUPS: readonly (readonly string[])[] = [
 ];
 
 export const HERO_TAGLINE =
-  'Se posso scriptarlo, lo scrivo. Se è moderno, lo costruisco. Sviluppatore full-stack tra il web e i sistemi industriali — ogni progetto è un sistema da capire, ottimizzare e rendere bello. Non creo bug: li trovo prima che diventino feature.';
+  "Se posso scriptarlo, lo scrivo. Se è moderno, lo costruisco. Sviluppatore full-stack, dal frontend all'infrastruttura — ogni progetto è un sistema da capire, ottimizzare e rendere bello. Non creo bug: li trovo prima che diventino feature.";

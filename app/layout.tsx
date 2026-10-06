@@ -32,7 +32,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: `${SITE.brand} Portfolio`,
-  description: `Portfolio di ${SITE.owner} — Full-stack developer, HMI specialist, codename ${SITE.brand}. If I can script it, I will.`,
+  description: `Portfolio di ${SITE.owner} — Full-stack developer, codename ${SITE.brand}. Se posso scriptarlo, lo scrivo.`,
   alternates: {
     types: { 'text/markdown': MARKDOWN_PATH },
   },

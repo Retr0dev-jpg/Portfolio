@@ -6,7 +6,7 @@ Portfolio web moderno e minimalista costruito con Next.js, con animazioni fluide
 
 ## 🛠️ Stack
 
-Next.js 16 · React 19 · TypeScript · Tailwind CSS v4 · Framer Motion · Lenis · Resend
+Next.js 16 · React 19 · TypeScript · Tailwind CSS v4 · Framer Motion · Lenis · Resend · zod · Cloudflare Turnstile
 
 ---
 
